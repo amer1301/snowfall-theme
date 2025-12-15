@@ -1,0 +1,140 @@
+/*
+Theme Name: Snowfall Theme
+Author: Amanda
+Version: 1.0
+*/
+
+:root{
+  --nav-h: 72px;
+  --text: #ffffff;
+  --btn: #0e2a3a;
+  --btn2: #0e2a3a;
+  --overlay: rgba(120, 160, 180, 0.45);
+}
+
+*{ box-sizing: border-box; }
+body{ margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+.site-header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  background: transparent;
+}
+
+.nav{
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 2em;
+}
+
+.logo{
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  font-size: 1.4em;
+}
+
+.menu{
+  margin-left: auto;
+  display: flex;
+  gap: 1.5em;
+}
+
+.menu a{
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1em;
+  opacity: 0.9;
+}
+
+.menu a:hover{ opacity: 1; text-decoration: underline; }
+
+.hero-pan{
+  position: relative;
+  height: 170vh;
+}
+
+.hero-pan__sticky{
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-pan__media{
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.hero-pan__img{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.hero-pan__overlay{
+  position: absolute;
+  inset: 0;
+  background: rgba(120,160,180,.45);
+}
+
+.hero-pan__content{
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  color: #fff;
+  padding: 80px 16px 24px;
+}
+
+.hero-pan__eyebrow{
+  letter-spacing: .2em;
+  font-size: 1.2em;
+  margin: 0 0 10px;
+  text-shadow: 0 5px 12px rgba(0, 0, 0, 0.35);
+}
+
+h1 {
+  font-size: 3em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.hero-pan__cta{
+  margin-top: 22px;
+  display: inline-flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn{
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: #0c2a36;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.btn:hover{
+  border: 2px solid white;
+}

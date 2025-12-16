@@ -10,9 +10,14 @@
 
 <header class="site-header">
   <div class="nav">
-    <a class="logo" href="<?php echo esc_url(home_url('/')); ?>">
-      Snowfall Adventures
-    </a>
+<a class="logo" href="<?php echo esc_url(home_url('/')); ?>">
+  Snowfall Adventures
+  <img
+    src="<?php echo get_template_directory_uri(); ?>/assets/images/pinetree.png"
+    alt=""
+    class="logo__icon"
+  >
+</a>
 
     <nav class="menu" aria-label="Huvudmeny">
       <a href="#">Startsida</a>

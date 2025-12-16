@@ -45,3 +45,36 @@ function snowfall_theme_setup() {
   add_theme_support('post-thumbnails');
 }
 add_action('after_setup_theme', 'snowfall_theme_setup');
+
+function snowfall_customize_register($wp_customize) {
+
+  $wp_customize->add_section('snowfall_quotebar', [
+    'title'    => 'Quote-bar (under hero)',
+    'priority' => 35,
+  ]);
+
+  // Quote text
+  $wp_customize->add_setting('snowfall_quote_text', [
+    'default'           => 'En stillsam och mäktig vinterupplevelse. Guiderna var kunniga, trygga och gav oss minnen för livet.',
+    'sanitize_callback' => 'sanitize_textarea_field',
+  ]);
+
+  $wp_customize->add_control('snowfall_quote_text', [
+    'label'   => 'Citattext',
+    'section' => 'snowfall_quotebar',
+    'type'    => 'textarea',
+  ]);
+
+  // Quote author
+  $wp_customize->add_setting('snowfall_quote_author', [
+    'default'           => 'Deltagare på vintervandring',
+    'sanitize_callback' => 'sanitize_text_field',
+  ]);
+
+  $wp_customize->add_control('snowfall_quote_author', [
+    'label'   => 'Avsändare',
+    'section' => 'snowfall_quotebar',
+    'type'    => 'text',
+  ]);
+}
+add_action('customize_register', 'snowfall_customize_register');

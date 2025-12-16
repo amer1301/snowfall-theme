@@ -1,6 +1,10 @@
 <?php
 get_header();
+
+$quote_text   = trim( (string) get_theme_mod('snowfall_quote_text') );
+$quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
 ?>
+
 
 <section class="hero-pan" id="top">
   <div class="hero-pan__sticky">
@@ -23,6 +27,26 @@ get_header();
     </div>
   </div>
 </section>
+
+<?php if ( $quote_text !== '' || $quote_author !== '' ) : ?>
+<section class="quote-bar">
+  <div class="quote-bar__inner">
+    <span class="quote-bar__mark quote-bar__mark--left">“</span>
+
+    <div class="quote-bar__content">
+      <?php if ( $quote_text !== '' ) : ?>
+        <p class="quote-bar__text"><?php echo nl2br( esc_html( $quote_text ) ); ?></p>
+      <?php endif; ?>
+
+      <?php if ( $quote_author !== '' ) : ?>
+        <p class="quote-bar__author">— <?php echo esc_html( $quote_author ); ?></p>
+      <?php endif; ?>
+    </div>
+
+    <span class="quote-bar__mark quote-bar__mark--right">”</span>
+  </div>
+</section>
+<?php endif; ?>
 
 
 <?php

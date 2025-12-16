@@ -233,12 +233,81 @@ $has_next =
     <?php endif; ?>
   </div>
 </div>
-
-
   </div>
 </section>
 <?php endif; ?>
 
+
+<?php
+// --- Nyhetssektion ---
+$news_count = 2;
+
+// Hämta senaste inlägg
+$news_q = new WP_Query([
+  'post_type'           => 'post',   // använder vanliga WP-inlägg
+  'posts_per_page'      => $news_count,
+  'ignore_sticky_posts' => true,
+]);
+
+$news_heading = 'Nyhetssektion';
+?>
+
+<?php if ($news_q->have_posts()) : ?>
+<section class="news" id="news" aria-label="<?php echo esc_attr($news_heading); ?>">
+  <div class="news__inner">
+
+    <header class="news__header">
+      <h2 class="news__title"><?php echo esc_html($news_heading); ?></h2>
+      <span class="news__line" aria-hidden="true"></span>
+    </header>
+
+    <div class="news__grid">
+      <?php
+      $i = 0;
+      while ($news_q->have_posts()) :
+        $news_q->the_post();
+        $i++;
+
+        $is_alt = ($i % 2 === 0);
+
+        $thumb_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
+        $date_text = get_the_date();
+        $excerpt   = get_the_excerpt();
+      ?>
+        <article class="news-item <?php echo $is_alt ? 'news-item--alt' : ''; ?>">
+          <div class="news-item__copy">
+            <h3 class="news-item__title"><?php the_title(); ?></h3>
+            <p class="news-item__date"><?php echo esc_html($date_text); ?></p>
+
+            <?php if ($excerpt) : ?>
+              <p class="news-item__excerpt"><?php echo esc_html($excerpt); ?></p>
+            <?php endif; ?>
+
+            <a class="btn news-item__btn" href="<?php the_permalink(); ?>">Läs mer</a>
+          </div>
+
+          <div class="news-item__media" aria-hidden="true">
+            <?php if ($thumb_url) : ?>
+              <img src="<?php echo esc_url($thumb_url); ?>" alt="" loading="lazy">
+            <?php else : ?>
+              <div class="news-item__placeholder"></div>
+            <?php endif; ?>
+          </div>
+        </article>
+      <?php endwhile; ?>
+      <?php wp_reset_postdata(); ?>
+    </div>
+
+    <!-- Visa alla nyheter => arkivet -->
+    <div class="news__footer">
+      <a class="btn news__all" href="<?php echo esc_url( get_permalink( get_option('page_for_posts') ) ); ?>">
+        Visa alla nyheter
+      </a>
+    </div>
+
+  </div>
+</section>
+<?php endif; ?>
 
 <?php
 // Laddar in footer.php (sidans avslut: footer, scripts via wp_footer, osv.)

@@ -170,5 +170,76 @@ $pan_btn_url  = get_theme_mod('snowfall_pan_banner_button_url', '');
 <?php endif; ?>
 
 <?php
+// --- nästa sektion (Customizer) ---
+$next_title    = trim((string) get_theme_mod('snowfall_next_title', 'Lorem ipsum<br>&amp; dolor'));
+$next_text     = trim((string) get_theme_mod('snowfall_next_text', 'Lorem ipsum dolor sit amet...'));
+$next_btn_text = trim((string) get_theme_mod('snowfall_next_btn_text', 'Knapp'));
+$next_btn_url  = trim((string) get_theme_mod('snowfall_next_btn_url', ''));
+
+$next_img_1_id = (int) get_theme_mod('snowfall_next_img_1');
+$next_img_2_id = (int) get_theme_mod('snowfall_next_img_2');
+$next_img_3_id = (int) get_theme_mod('snowfall_next_img_3');
+
+$next_img_1 = $next_img_1_id ? wp_get_attachment_image_url($next_img_1_id, 'large') : '';
+$next_img_2 = $next_img_2_id ? wp_get_attachment_image_url($next_img_2_id, 'large') : '';
+$next_img_3 = $next_img_3_id ? wp_get_attachment_image_url($next_img_3_id, 'large') : '';
+
+// Rendera bara om något finns
+$has_next =
+  ($next_title !== '' || $next_text !== '' || $next_btn_url !== '' || $next_img_1 || $next_img_2 || $next_img_3);
+?>
+
+<?php if ($has_next) : ?>
+<section class="split-media" aria-label="<?php echo esc_attr( wp_strip_all_tags($next_title) ); ?>">
+  <div class="split-media__inner">
+
+    <div class="split-media__copy">
+      <?php if ($next_title !== '') : ?>
+        <!-- Tillåter <br> i rubriken -->
+        <h2 class="split-media__title"><?php echo wp_kses($next_title, ['br' => []]); ?></h2>
+      <?php endif; ?>
+
+      <span class="split-media__line" aria-hidden="true"></span>
+
+      <?php if ($next_text !== '') : ?>
+        <p class="split-media__text"><?php echo nl2br(esc_html($next_text)); ?></p>
+      <?php endif; ?>
+
+      <?php if ($next_btn_url !== '' && $next_btn_text !== '') : ?>
+        <a class="btn split-media__btn" href="<?php echo esc_url($next_btn_url); ?>">
+          <?php echo esc_html($next_btn_text); ?>
+        </a>
+      <?php endif; ?>
+    </div>
+
+    <div class="split-media__media" aria-hidden="true">
+  <div class="split-media__grid">
+    <?php if ($next_img_1) : ?>
+      <div class="split-media__img split-media__img--small split-media__img--a">
+        <img src="<?php echo esc_url($next_img_1); ?>" alt="" loading="lazy">
+      </div>
+    <?php endif; ?>
+
+    <?php if ($next_img_2) : ?>
+      <div class="split-media__img split-media__img--small split-media__img--b">
+        <img src="<?php echo esc_url($next_img_2); ?>" alt="" loading="lazy">
+      </div>
+    <?php endif; ?>
+
+    <?php if ($next_img_3) : ?>
+      <div class="split-media__img split-media__img--tall split-media__img--c">
+        <img src="<?php echo esc_url($next_img_3); ?>" alt="" loading="lazy">
+      </div>
+    <?php endif; ?>
+  </div>
+</div>
+
+
+  </div>
+</section>
+<?php endif; ?>
+
+
+<?php
 // Laddar in footer.php (sidans avslut: footer, scripts via wp_footer, osv.)
 get_footer();

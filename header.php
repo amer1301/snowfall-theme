@@ -18,13 +18,15 @@
     class="logo__icon"
   >
 </a>
-
-    <nav class="menu" aria-label="Huvudmeny">
-      <a href="#">Startsida</a>
-      <a href="#">Undersida</a>
-      <a href="#">Undersida</a>
-      <a href="#">Undersida</a>
-      <a href="#">Undersida</a>
-    </nav>
+<nav class="menu" aria-label="Huvudmeny">
+  <?php
+  wp_nav_menu([
+    'theme_location' => 'primary',
+    'container'      => false,
+    'menu_class'     => 'menu__list',
+    'fallback_cb'    => false,
+  ]);
+  ?>
+</nav>
   </div>
 </header>

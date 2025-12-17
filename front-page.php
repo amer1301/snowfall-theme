@@ -1,14 +1,10 @@
 <?php
-// Laddar in header.php (WordPress-templatens topp: <head>, meny osv.)
 get_header();
 
-// Hämtar citat från Customizer (theme_mod).
-// trim + (string) ger stabilt tom-sträng-beteende även om värdet är null/annat.
 $quote_text   = trim( (string) get_theme_mod('snowfall_quote_text') );
 $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
 ?>
 
-<!-- HERO med sticky + bild som panoreras via JS -->
 <section class="hero-pan" id="top">
   <div class="hero-pan__sticky">
     <div class="hero-pan__media" aria-hidden="true">
@@ -19,20 +15,11 @@ $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
 
     <div class="hero-pan__overlay" aria-hidden="true"></div>
 
-    <div class="hero-pan__content">
-      <p class="hero-pan__eyebrow">FJÄLLNÄRA NATURUPPLEVELSER</p>
-      <h1>Guidade vinterturer i<br>fjällen</h1>
-
-      <div class="hero-pan__cta">
-        <a class="btn" href="#tours">Se våra upplevelser</a>
-        <a class="btn" href="#contact">Kontakta oss</a>
-      </div>
-    </div>
+    <?php snowfall_render_hero_pan_content('front', true); ?>
   </div>
 </section>
 
 <?php if ( $quote_text !== '' || $quote_author !== '' ) : ?>
-    <!-- Visar quote-bar endast om det finns text eller författare angivet i Customizer -->
 <section class="quote-bar">
   <div class="quote-bar__inner">
     <span class="quote-bar__mark quote-bar__mark--left">“</span>
@@ -43,7 +30,7 @@ $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
       <?php endif; ?>
 
       <?php if ( $quote_author !== '' ) : ?>
-        <p class="quote-bar__author">— <?php echo esc_html( $quote_author ); ?></p>
+<p class="quote-bar__author">— <?php echo esc_html( $quote_author ); ?></p>
       <?php endif; ?>
     </div>
 

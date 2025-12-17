@@ -52,83 +52,51 @@ $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
 </section>
 <?php endif; ?>
 
-<?php
-// --- Upplevelser (Customizer) ---
-// Rubrik med fallback-värde om inget är satt i Customizer
-$exp_heading = trim((string) get_theme_mod('snowfall_exp_heading', 'Våra upplevelser'));
-
-$exp1_img   = (int) get_theme_mod('snowfall_exp1_img');
-$exp1_title = trim((string) get_theme_mod('snowfall_exp1_title'));
-$exp1_text  = trim((string) get_theme_mod('snowfall_exp1_text'));
-$exp1_link  = trim((string) get_theme_mod('snowfall_exp1_link'));
-
-$exp2_img   = (int) get_theme_mod('snowfall_exp2_img');
-$exp2_title = trim((string) get_theme_mod('snowfall_exp2_title'));
-$exp2_text  = trim((string) get_theme_mod('snowfall_exp2_text'));
-$exp2_link  = trim((string) get_theme_mod('snowfall_exp2_link'));
-
-$exp1_img_url = $exp1_img ? wp_get_attachment_image_url($exp1_img, 'large') : '';
-$exp2_img_url = $exp2_img ? wp_get_attachment_image_url($exp2_img, 'large') : '';
-?>
-
 <!-- Upplevelser-sektion -->
-<section class="experiences" id="tours">
-  <div class="experiences__inner">
-    <header class="experiences__header">
-      <h2 class="experiences__title"><?php echo esc_html($exp_heading); ?></h2>
-      <span class="experiences__bar" aria-hidden="true"></span>
-    </header>
+<?php
+$exp_q = new WP_Query([
+  'post_type'           => 'post',
+  'posts_per_page'      => -1,
+  'category_name'       => 'upplevelser',
+  'ignore_sticky_posts' => true,
+]);
 
-    <div class="experiences__grid">
+if ($exp_q->have_posts()) : ?>
+<section class="exp-slider" aria-label="Våra upplevelser">
+  <h2 class="exp-slider__title">Våra upplevelser</h2>
 
-      <?php if ($exp1_title !== '' || $exp1_text !== '' || $exp1_img_url !== '') : ?>
-      <article class="card">
-        <?php if ($exp1_img_url) : ?>
-          <div class="card__media">
-            <img src="<?php echo esc_url($exp1_img_url); ?>" alt="" loading="lazy">
-          </div>
-        <?php endif; ?>
+  <div class="exp-slider__wrap">
+    <button class="exp-slider__arrow exp-slider__arrow--prev" aria-label="Föregående">‹</button>
 
-        <?php if ($exp1_title) : ?>
-          <h3 class="card__title"><?php echo esc_html($exp1_title); ?></h3>
-        <?php endif; ?>
+    <div class="exp-slider__viewport">
+      <div class="exp-slider__track">
+        <?php while ($exp_q->have_posts()) : $exp_q->the_post(); ?>
+          <article class="exp-slide">
+            <div class="exp-slide__card">
+              <?php if (has_post_thumbnail()) : ?>
+                <div class="exp-slide__img">
+                  <?php the_post_thumbnail('large'); ?>
+                </div>
+              <?php endif; ?>
 
-        <?php if ($exp1_text) : ?>
-          <p class="card__text"><?php echo nl2br(esc_html($exp1_text)); ?></p>
-        <?php endif; ?>
-
-        <?php if ($exp1_link) : ?>
-          <a class="btn" href="<?php echo esc_url($exp1_link); ?>">Läs mer</a>
-        <?php endif; ?>
-      </article>
-      <?php endif; ?>
-
-
-      <?php if ($exp2_title !== '' || $exp2_text !== '' || $exp2_img_url !== '') : ?>
-      <article class="card">
-        <?php if ($exp2_img_url) : ?>
-          <div class="card__media">
-            <img src="<?php echo esc_url($exp2_img_url); ?>" alt="" loading="lazy">
-          </div>
-        <?php endif; ?>
-
-        <?php if ($exp2_title) : ?>
-          <h3 class="card__title"><?php echo esc_html($exp2_title); ?></h3>
-        <?php endif; ?>
-
-        <?php if ($exp2_text) : ?>
-          <p class="card__text"><?php echo nl2br(esc_html($exp2_text)); ?></p>
-        <?php endif; ?>
-
-        <?php if ($exp2_link) : ?>
-          <a class="btn" href="<?php echo esc_url($exp2_link); ?>">Läs mer</a>
-        <?php endif; ?>
-      </article>
-      <?php endif; ?>
-
+              <div class="exp-slide__content">
+                <h3 class="exp-slide__title"><?php the_title(); ?></h3>
+                <p class="exp-slide__text"><?php echo esc_html(get_the_excerpt()); ?></p>
+              </div>
+            </div>
+          </article>
+        <?php endwhile; wp_reset_postdata(); ?>
+      </div>
     </div>
+
+    <button class="exp-slider__arrow exp-slider__arrow--next" aria-label="Nästa">›</button>
   </div>
+
+  <div class="exp-slider__dots"></div>
 </section>
+<?php endif; ?>
+
+
 
 <?php
 // --- Scroll-pan banner (Customizer) ---
@@ -239,75 +207,124 @@ $has_next =
 
 
 <?php
-// --- Nyhetssektion ---
-$news_count = 2;
+// --- Nyhetssektion (Banner + sidopanel) ---
+$news_heading = 'Nyhetssektion';
 
-// Hämta senaste inlägg
-$news_q = new WP_Query([
-  'post_type'           => 'post',   // använder vanliga WP-inlägg
-  'posts_per_page'      => $news_count,
+
+$featured_count = 3;
+$sidebar_count  = 6;
+
+$featured_q = new WP_Query([
+  'post_type'           => 'post',
+  'posts_per_page'      => $featured_count,
   'ignore_sticky_posts' => true,
+  'category_name'       => 'nyheter',
 ]);
 
-$news_heading = 'Nyhetssektion';
-?>
+$featured_ids = [];
 
-<?php if ($news_q->have_posts()) : ?>
+if ($featured_q->have_posts()) :
+?>
 <section class="news" id="news" aria-label="<?php echo esc_attr($news_heading); ?>">
   <div class="news__inner">
 
-    <header class="news__header">
-      <h2 class="news__title"><?php echo esc_html($news_heading); ?></h2>
-      <span class="news__line" aria-hidden="true"></span>
-    </header>
+<header class="news__header">
+  <h2 class="news__title"><?php echo esc_html($news_heading); ?></h2>
+  <span class="news__line" aria-hidden="true"></span>
+</header>
 
-    <div class="news__grid">
+    <div class="news__layout">
+
+      <div class="news-hero" aria-label="Senaste nyheter">
+        <button class="news-hero__arrow news-hero__arrow--prev" aria-label="Föregående">‹</button>
+
+        <div class="news-hero__viewport">
+          <div class="news-hero__track">
+            <?php while ($featured_q->have_posts()) : $featured_q->the_post();
+              $featured_ids[] = get_the_ID();
+              $thumb_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
+              $date_text = get_the_date();
+              $excerpt   = get_the_excerpt();
+            ?>
+              <article class="news-hero__slide">
+                <a class="news-hero__link" href="<?php the_permalink(); ?>">
+                  <div class="news-hero__media" aria-hidden="true">
+                    <?php if ($thumb_url) : ?>
+                      <img class="news-hero__img" src="<?php echo esc_url($thumb_url); ?>" alt="" loading="lazy">
+                    <?php endif; ?>
+                  </div>
+
+                  <div class="news-hero__content">
+                    <h3 class="news-hero__title"><?php the_title(); ?></h3>
+                    <p class="news-hero__date"><?php echo esc_html($date_text); ?></p>
+                    <?php if ($excerpt) : ?>
+                      <p class="news-hero__text"><?php echo esc_html($excerpt); ?></p>
+                    <?php endif; ?>
+                    <span class="btn news-hero__btn">Läs mer</span>
+                  </div>
+                </a>
+              </article>
+            <?php endwhile; wp_reset_postdata(); ?>
+          </div>
+        </div>
+
+        <button class="news-hero__arrow news-hero__arrow--next" aria-label="Nästa">›</button>
+
+        <div class="news-hero__dots" aria-hidden="false"></div>
+      </div>
+
       <?php
-      $i = 0;
-      while ($news_q->have_posts()) :
-        $news_q->the_post();
-        $i++;
+      $sidebar_q = new WP_Query([
+        'post_type'           => 'post',
+        'posts_per_page'      => $sidebar_count,
+        'ignore_sticky_posts' => true,
+        'category_name'       => 'nyheter',
+        'post__not_in'        => $featured_ids,
+      ]);
 
-        $is_alt = ($i % 2 === 0);
-
-        $thumb_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
-        $date_text = get_the_date();
-        $excerpt   = get_the_excerpt();
+      if ($sidebar_q->have_posts()) :
       ?>
-        <article class="news-item <?php echo $is_alt ? 'news-item--alt' : ''; ?>">
-          <div class="news-item__copy">
-            <h3 class="news-item__title"><?php the_title(); ?></h3>
-            <p class="news-item__date"><?php echo esc_html($date_text); ?></p>
+      <aside class="news-side" aria-label="Tidigare nyheter">
+        <h3 class="news-side__title">Tidigare nyheter</h3>
 
-            <?php if ($excerpt) : ?>
-              <p class="news-item__excerpt"><?php echo esc_html($excerpt); ?></p>
-            <?php endif; ?>
+<ul class="news-side__list">
+  <?php while ($sidebar_q->have_posts()) : $sidebar_q->the_post();
+    $side_thumb = get_the_post_thumbnail_url(get_the_ID(), 'thumbnail');
+  ?>
+    <li class="news-side__item">
+      <a class="news-side__link" href="<?php the_permalink(); ?>">
+        <span class="news-side__thumb" aria-hidden="true">
+          <?php if ($side_thumb) : ?>
+            <img src="<?php echo esc_url($side_thumb); ?>" alt="" loading="lazy">
+          <?php else : ?>
+            <span class="news-side__thumb--placeholder"></span>
+          <?php endif; ?>
+        </span>
 
-            <a class="btn news-item__btn" href="<?php the_permalink(); ?>">Läs mer</a>
-          </div>
-
-          <div class="news-item__media" aria-hidden="true">
-            <?php if ($thumb_url) : ?>
-              <img src="<?php echo esc_url($thumb_url); ?>" alt="" loading="lazy">
-            <?php else : ?>
-              <div class="news-item__placeholder"></div>
-            <?php endif; ?>
-          </div>
-        </article>
-      <?php endwhile; ?>
-      <?php wp_reset_postdata(); ?>
-    </div>
-
-    <!-- Visa alla nyheter => arkivet -->
-    <div class="news__footer">
-      <a class="btn news__all" href="<?php echo esc_url( get_permalink( get_option('page_for_posts') ) ); ?>">
-        Visa alla nyheter
+        <span class="news-side__meta">
+          <span class="news-side__item-title"><?php the_title(); ?></span>
+          <span class="news-side__item-date"><?php echo esc_html(get_the_date()); ?></span>
+        </span>
       </a>
-    </div>
+    </li>
+  <?php endwhile; ?>
+</ul>
 
+        <a class="btn news-side__all"
+           href="<?php
+             $cat = get_category_by_slug('nyheter');
+             echo $cat ? esc_url(get_category_link($cat->term_id)) : esc_url(home_url('/'));
+           ?>">
+          Visa alla nyheter
+        </a>
+      </aside>
+      <?php wp_reset_postdata(); endif; ?>
+
+    </div>
   </div>
 </section>
 <?php endif; ?>
+
 
 <?php
 // Laddar in footer.php (sidans avslut: footer, scripts via wp_footer, osv.)

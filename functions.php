@@ -2,6 +2,7 @@
 /**
  * Snowfall Adventures – Theme functions
  *
+ * Innehåller:
  * - Enqueue av CSS/JS
  * - Theme supports (title-tag, menyer, thumbnails)
  * - Customizer-fält för dynamiskt innehåll på startsidan
@@ -20,7 +21,7 @@ function snowfall_enqueue_assets() {
     wp_get_theme()->get('Version')
   );
 
-  // Parallax / scroll-pan script (JS med hero-pan + pan-banner)
+  // Parallax / scroll-pan script (hero-pan + pan-banner)
   wp_enqueue_script(
     'snowfall-parallax',
     get_template_directory_uri() . '/assets/js/parallax.js',
@@ -28,16 +29,34 @@ function snowfall_enqueue_assets() {
     wp_get_theme()->get('Version'),
     true // load in footer för bättre prestanda
   );
+
+  // Experiences slider (infinite carousel)
+  // Tips: om du endast vill ladda på startsidan kan du wrappa i if (is_front_page()).
+  wp_enqueue_script(
+    'snowfall-exp-slider',
+    get_template_directory_uri() . '/assets/js/exp-slider.js',
+    [],
+    wp_get_theme()->get('Version'),
+    true
+  );
+
+    wp_enqueue_script(
+    'snowfall-news-slider',
+    get_template_directory_uri() . '/assets/js/news-slider.js',
+    [],
+    wp_get_theme()->get('Version'),
+    true
+  );
 }
 add_action('wp_enqueue_scripts', 'snowfall_enqueue_assets');
 
 
 /* --------------------------------------------------
- * Theme support (bra att ha)
+ * Theme support
  * -------------------------------------------------- */
 function snowfall_theme_setup() {
 
-  // Dynamisk <title> (WordPress sköter title-taggen)
+  // Dynamisk <title>
   add_theme_support('title-tag');
 
   // Menyer
@@ -45,7 +64,7 @@ function snowfall_theme_setup() {
     'primary' => __('Primary Menu', 'snowfall'),
   ]);
 
-  // Featured images (kan användas för inlägg/sidor, och vissa block)
+  // Featured images (utvald bild) för inlägg/sidor – används bl.a. i “nyheter” och sliders
   add_theme_support('post-thumbnails');
 }
 add_action('after_setup_theme', 'snowfall_theme_setup');
@@ -85,117 +104,6 @@ function snowfall_customize_register($wp_customize) {
     'section' => 'snowfall_quotebar',
     'type'    => 'text',
   ]);
-
-
-  /* -------------------------------------------
-   * Experiences (kort-rutor)
-   * ------------------------------------------- */
-  $wp_customize->add_section('snowfall_experiences', [
-    'title'    => 'Våra upplevelser',
-    'priority' => 36,
-  ]);
-
-  // Heading
-  $wp_customize->add_setting('snowfall_exp_heading', [
-    'default'           => 'Våra upplevelser',
-    'sanitize_callback' => 'sanitize_text_field',
-  ]);
-  $wp_customize->add_control('snowfall_exp_heading', [
-    'label'   => 'Rubrik',
-    'section' => 'snowfall_experiences',
-    'type'    => 'text',
-  ]);
-
-  // Card 1 – bild (Media control => sparar attachment ID)
-  $wp_customize->add_setting('snowfall_exp1_img', [
-    'default'           => 0,
-    'sanitize_callback' => 'absint',
-  ]);
-  $wp_customize->add_control(new WP_Customize_Media_Control(
-    $wp_customize,
-    'snowfall_exp1_img',
-    [
-      'label'     => 'Bild (kort 1)',
-      'section'   => 'snowfall_experiences',
-      'mime_type' => 'image',
-    ]
-  ));
-
-  $wp_customize->add_setting('snowfall_exp1_title', [
-    'default'           => 'Titel',
-    'sanitize_callback' => 'sanitize_text_field',
-  ]);
-  $wp_customize->add_control('snowfall_exp1_title', [
-    'label'   => 'Titel (kort 1)',
-    'section' => 'snowfall_experiences',
-    'type'    => 'text',
-  ]);
-
-  $wp_customize->add_setting('snowfall_exp1_text', [
-    'default'           => 'Kort beskrivning...',
-    'sanitize_callback' => 'sanitize_textarea_field',
-  ]);
-  $wp_customize->add_control('snowfall_exp1_text', [
-    'label'   => 'Text (kort 1)',
-    'section' => 'snowfall_experiences',
-    'type'    => 'textarea',
-  ]);
-
-  $wp_customize->add_setting('snowfall_exp1_link', [
-    'default'           => '',
-    'sanitize_callback' => 'esc_url_raw',
-  ]);
-  $wp_customize->add_control('snowfall_exp1_link', [
-    'label'   => 'Länk (kort 1) – klistra in URL till sidan',
-    'section' => 'snowfall_experiences',
-    'type'    => 'url',
-  ]);
-
-  // Card 2
-  $wp_customize->add_setting('snowfall_exp2_img', [
-    'default'           => 0,
-    'sanitize_callback' => 'absint',
-  ]);
-  $wp_customize->add_control(new WP_Customize_Media_Control(
-    $wp_customize,
-    'snowfall_exp2_img',
-    [
-      'label'     => 'Bild (kort 2)',
-      'section'   => 'snowfall_experiences',
-      'mime_type' => 'image',
-    ]
-  ));
-
-  $wp_customize->add_setting('snowfall_exp2_title', [
-    'default'           => 'Titel',
-    'sanitize_callback' => 'sanitize_text_field',
-  ]);
-  $wp_customize->add_control('snowfall_exp2_title', [
-    'label'   => 'Titel (kort 2)',
-    'section' => 'snowfall_experiences',
-    'type'    => 'text',
-  ]);
-
-  $wp_customize->add_setting('snowfall_exp2_text', [
-    'default'           => 'Kort beskrivning...',
-    'sanitize_callback' => 'sanitize_textarea_field',
-  ]);
-  $wp_customize->add_control('snowfall_exp2_text', [
-    'label'   => 'Text (kort 2)',
-    'section' => 'snowfall_experiences',
-    'type'    => 'textarea',
-  ]);
-
-  $wp_customize->add_setting('snowfall_exp2_link', [
-    'default'           => '',
-    'sanitize_callback' => 'esc_url_raw',
-  ]);
-  $wp_customize->add_control('snowfall_exp2_link', [
-    'label'   => 'Länk (kort 2) – klistra in URL till sidan',
-    'section' => 'snowfall_experiences',
-    'type'    => 'url',
-  ]);
-
 
   /* -------------------------------------------
    * Scroll-pan banner (fullbredd bild + content)
@@ -267,15 +175,14 @@ function snowfall_customize_register($wp_customize) {
 
 
   /* -------------------------------------------
-   * NY: Split media-sektion (layouten i din bild)
-   * Titel + text + knapp till vänster, 3 bilder till höger
+   * Split media-sektion (titel/text/knapp + 3 bilder)
    * ------------------------------------------- */
   $wp_customize->add_section('snowfall_next_section', [
     'title'    => 'Nästa sektion (split media)',
     'priority' => 38,
   ]);
 
-  // Titel – vi tillåter <br> för att kunna göra radbrytning i rubriken
+  // Titel – tillåter <br> för radbrytning
   $wp_customize->add_setting('snowfall_next_title', [
     'default'           => 'Lorem ipsum<br>&amp; dolor',
     'sanitize_callback' => function($value) {
@@ -289,7 +196,7 @@ function snowfall_customize_register($wp_customize) {
     'description' => 'Tips: använd <br> för radbrytning.',
   ]);
 
-  // Brödtext
+  // Text
   $wp_customize->add_setting('snowfall_next_text', [
     'default'           => '',
     'sanitize_callback' => 'sanitize_textarea_field',

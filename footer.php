@@ -1,5 +1,13 @@
-<footer class="site-footer">
-  <p>&copy; <?php echo date('Y'); ?> Snowfall Adventures</p>
+<footer class="footer">
+  <p>Snowfall Adventures</p>
+
+  <p class="footer__small">
+    Projektuppgift – Webbutveckling för WordPress
+  </p>
+
+  <p class="footer__small">
+    Copyright © <?php echo date('Y'); ?> Amanda Persdotter
+  </p>
 </footer>
 
 <?php wp_footer(); ?>

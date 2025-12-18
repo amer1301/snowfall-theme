@@ -58,6 +58,13 @@ add_action('wp_enqueue_scripts', function () {
     true
   );
 
+  wp_enqueue_script(
+  'snowfall-bookingbar',
+  get_template_directory_uri() . '/assets/js/bookingbar.js',
+  [],
+  wp_get_theme()->get('Version'),
+  true
+);
 });
 
 
@@ -409,5 +416,385 @@ add_action('customize_register', function($wp_customize) {
       ]
     ));
   }
+/* -------------------------------------------
+ * Bookingbar – Labels
+ * ------------------------------------------- */
+$wp_customize->add_section('snowfall_bookingbar_labels', [
+  'title'    => 'Bookingbar – Texter',
+  'priority' => 28,
+]);
 
+$labels = [
+  'rooms'  => ['Rum', 'Label:'],
+  'guests' => ['Gäster', 'Label:'],
+  'from'   => ['Från', 'Label: Från'],
+  'to'     => ['Till', 'Label: Till'],
+];
+
+foreach ($labels as $key => [$default, $label]) {
+  $setting_id = "snowfall_bookingbar_label_{$key}";
+
+  $wp_customize->add_setting($setting_id, [
+    'default'           => $default,
+    'sanitize_callback' => 'sanitize_text_field',
+  ]);
+
+  $wp_customize->add_control($setting_id, [
+    'section' => 'snowfall_bookingbar_labels',
+    'label'   => $label,
+    'type'    => 'text',
+  ]);
+}
+
+
+/* -------------------------------------------
+ * Bookingbar – Tabs & knappar & värden
+ * ------------------------------------------- */
+$wp_customize->add_section('snowfall_bookingbar_settings', [
+  'title'    => 'Bookingbar – Inställningar',
+  'priority' => 29,
+]);
+
+$tab_defaults = ['Turer', 'Boende', 'Restaurang', 'Privat guide'];
+for ($i = 1; $i <= 4; $i++) {
+  $id = "snowfall_bookingbar_tab_{$i}";
+
+  $wp_customize->add_setting($id, [
+    'default'           => $tab_defaults[$i-1],
+    'sanitize_callback' => 'sanitize_text_field',
+  ]);
+
+  $wp_customize->add_control($id, [
+    'section' => 'snowfall_bookingbar_settings',
+    'label'   => "Tab {$i} – rubrik",
+    'type'    => 'text',
+  ]);
+}
+
+$wp_customize->add_setting('snowfall_bookingbar_button_text', [
+  'default'           => 'Hitta tillgänglighet',
+  'sanitize_callback' => 'sanitize_text_field',
+]);
+$wp_customize->add_control('snowfall_bookingbar_button_text', [
+  'section' => 'snowfall_bookingbar_settings',
+  'label'   => 'Knapptext',
+  'type'    => 'text',
+]);
+
+$wp_customize->add_setting('snowfall_bookingbar_active', [
+  'default'           => 0,
+  'sanitize_callback' => 'absint',
+]);
+$wp_customize->add_control('snowfall_bookingbar_active', [
+  'section' => 'snowfall_bookingbar_settings',
+  'label'   => 'Default vald tab (0 = första)',
+  'type'    => 'number',
+]);
+
+$wp_customize->add_setting('snowfall_bookingbar_rooms_min', [
+  'default'           => 1,
+  'sanitize_callback' => 'absint',
+]);
+$wp_customize->add_control('snowfall_bookingbar_rooms_min', [
+  'section' => 'snowfall_bookingbar_settings',
+  'label'   => 'Rum – min',
+  'type'    => 'number',
+]);
+
+$wp_customize->add_setting('snowfall_bookingbar_rooms_max', [
+  'default'           => 6,
+  'sanitize_callback' => 'absint',
+]);
+$wp_customize->add_control('snowfall_bookingbar_rooms_max', [
+  'section' => 'snowfall_bookingbar_settings',
+  'label'   => 'Rum – max',
+  'type'    => 'number',
+]);
+
+$wp_customize->add_setting('snowfall_bookingbar_guests_min', [
+  'default'           => 1,
+  'sanitize_callback' => 'absint',
+]);
+$wp_customize->add_control('snowfall_bookingbar_guests_min', [
+  'section' => 'snowfall_bookingbar_settings',
+  'label'   => 'Gäster – min',
+  'type'    => 'number',
+]);
+
+$wp_customize->add_setting('snowfall_bookingbar_guests_max', [
+  'default'           => 10,
+  'sanitize_callback' => 'absint',
+]);
+$wp_customize->add_control('snowfall_bookingbar_guests_max', [
+  'section' => 'snowfall_bookingbar_settings',
+  'label'   => 'Gäster – max',
+  'type'    => 'number',
+]);
+/* --------------------------------------------------
+ * Booking cards (sektion mellan bookingbar och kalender)
+ * -------------------------------------------------- */
+
+  $wp_customize->add_section('snowfall_booking_cards', [
+    'title'    => 'Booking – Bildkort (över kalendern)',
+    'priority' => 31,
+  ]);
+
+  $wp_customize->add_setting('snowfall_booking_cards_title', [
+    'default'           => 'STARTA DITT ÄVENTYR',
+    'sanitize_callback' => 'sanitize_text_field',
+  ]);
+  $wp_customize->add_control('snowfall_booking_cards_title', [
+    'section' => 'snowfall_booking_cards',
+    'label'   => 'Rubrik',
+    'type'    => 'text',
+  ]);
+
+  $wp_customize->add_setting('snowfall_booking_cards_subtitle', [
+    'default'           => 'Välj kategori nedan för att se vad som finns tillgängligt.',
+    'sanitize_callback' => 'sanitize_textarea_field',
+  ]);
+  $wp_customize->add_control('snowfall_booking_cards_subtitle', [
+    'section' => 'snowfall_booking_cards',
+    'label'   => 'Underrubrik',
+    'type'    => 'textarea',
+  ]);
+
+for ($i = 1; $i <= 3; $i++) {
+
+  $wp_customize->add_setting("snowfall_booking_card_{$i}_image", [
+    'default'           => 0,
+    'sanitize_callback' => 'absint',
+  ]);
+
+  $wp_customize->add_control(new WP_Customize_Media_Control(
+    $wp_customize,
+    "snowfall_booking_card_{$i}_image",
+    [
+      'section'   => 'snowfall_booking_cards',
+      'label'     => "Kort {$i} – Bild",
+      'mime_type' => 'image',
+    ]
+  ));
+
+  $wp_customize->add_setting("snowfall_booking_card_{$i}_icon", [
+    'default'           => 0,
+    'sanitize_callback' => 'absint',
+  ]);
+
+  $wp_customize->add_control(new WP_Customize_Media_Control(
+    $wp_customize,
+    "snowfall_booking_card_{$i}_icon",
+    [
+      'section'   => 'snowfall_booking_cards',
+      'label'     => "Kort {$i} – ikon (hexagon)",
+      'mime_type' => 'image',
+    ]
+  ));
+
+  $wp_customize->add_setting("snowfall_booking_card_{$i}_text", [
+    'default'           => ($i === 1 ? 'TURER' : ($i === 2 ? 'BOENDE' : 'RESTAURANG')),
+    'sanitize_callback' => 'sanitize_text_field',
+  ]);
+
+  $wp_customize->add_control("snowfall_booking_card_{$i}_text", [
+    'section' => 'snowfall_booking_cards',
+    'label'   => "Kort {$i} – Text på bilden",
+    'type'    => 'text',
+  ]);
+
+  $wp_customize->add_setting("snowfall_booking_card_{$i}_url", [
+    'default'           => '',
+    'sanitize_callback' => 'esc_url_raw',
+  ]);
+
+  $wp_customize->add_control("snowfall_booking_card_{$i}_url", [
+    'section'     => 'snowfall_booking_cards',
+    'label'       => "Kort {$i} – Länk (valfri)",
+    'type'        => 'url',
+    'description' => 'Om tomt blir kortet inte klickbart.',
+  ]);
+}
+});
+
+add_filter('show_admin_bar', function ($show) {
+  if (!is_admin() && isset($_GET['embed']) && $_GET['embed'] == '1') {
+    return false;
+  }
+  return $show;
+});
+
+add_filter('body_class', function ($classes) {
+  if (isset($_GET['embed']) && $_GET['embed'] === '1') {
+    $classes[] = 'is-embed';
+  }
+  return $classes;
+});
+
+/* --------------------------------------------------
+ * Shortcode: Bookingbar
+ * -------------------------------------------------- */
+add_shortcode('bookingbar', function($atts) {
+
+  $tabs_default = implode(',', array_filter([
+    get_theme_mod('snowfall_bookingbar_tab_1', 'Turer'),
+    get_theme_mod('snowfall_bookingbar_tab_2', 'Boende'),
+    get_theme_mod('snowfall_bookingbar_tab_3', 'Restaurang'),
+    get_theme_mod('snowfall_bookingbar_tab_4', 'Privat guide'),
+  ]));
+
+  $atts = shortcode_atts([
+    'tabs'        => $tabs_default,
+    'cat_slugs'   => 'turer,boende,restaurang,privat-guide',
+    'active'      => (string) get_theme_mod('snowfall_bookingbar_active', 0),
+    'button_text' => get_theme_mod('snowfall_bookingbar_button_text', 'Hitta tillgänglighet'),
+  ], $atts, 'bookingbar');
+
+  $tabs     = array_map('trim', explode(',', $atts['tabs']));
+  $catSlugs = array_map('trim', explode(',', $atts['cat_slugs']));
+  $active   = (int) $atts['active'];
+
+  $label_activity = get_theme_mod('snowfall_bookingbar_label_rooms', 'Aktivitet');
+  $label_guests   = get_theme_mod('snowfall_bookingbar_label_guests', 'Gäster');
+  $label_from     = get_theme_mod('snowfall_bookingbar_label_from', 'Från');
+  $label_to       = get_theme_mod('snowfall_bookingbar_label_to', 'Till');
+
+  $events = [];
+  if (function_exists('tribe_get_events')) {
+    $events = tribe_get_events([
+      'posts_per_page' => 200,
+      'start_date'     => '2000-01-01 00:00:00',
+      'end_date'       => '2100-01-01 23:59:59',
+      'orderby'        => 'title',
+      'order'          => 'ASC',
+    ]);
+  } else {
+    $events = get_posts([
+      'post_type'      => 'tribe_events',
+      'posts_per_page' => 200,
+      'post_status'    => 'any',
+      'orderby'        => 'title',
+      'order'          => 'ASC',
+      'suppress_filters' => true,
+    ]);
+  }
+
+  ob_start(); ?>
+    <div class="bookingbar"
+      data-active="<?php echo esc_attr($active); ?>">
+
+      <div class="bookingbar__tabs" role="tablist">
+        <?php foreach ($tabs as $i => $label): ?>
+          <button
+            type="button"
+            class="<?php echo $i === $active ? 'is-active' : ''; ?>"
+            data-tab="<?php echo esc_attr($i); ?>"
+            data-cat="<?php echo esc_attr($catSlugs[$i] ?? ''); ?>"
+            role="tab"
+            aria-selected="<?php echo $i === $active ? 'true' : 'false'; ?>">
+            <?php echo esc_html($label); ?>
+          </button>
+        <?php endforeach; ?>
+      </div>
+
+      <form class="bookingbar__form" data-bookingbar-form>
+        <input type="hidden" name="bb_cat" value="<?php echo esc_attr($catSlugs[$active] ?? ''); ?>">
+
+        <label>
+          <span class="bookingbar__selectlabel" data-select-label>
+            <?php echo esc_html($label_activity); ?>
+          </span>
+
+          <select name="bb_event" data-activity-select>
+            <option value="">Välj…</option>
+            <?php foreach ($events as $ev):
+              $terms = get_the_terms($ev->ID, 'tribe_events_cat');
+              $slugs = [];
+              if (is_array($terms)) foreach ($terms as $t) $slugs[] = $t->slug;
+              $dataCats = esc_attr(implode(',', $slugs));
+            ?>
+              <option value="<?php echo esc_attr(get_the_title($ev)); ?>" data-cats="<?php echo $dataCats; ?>">
+                <?php echo esc_html(get_the_title($ev)); ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </label>
+
+        <label><?php echo esc_html($label_guests); ?>
+          <select name="guests">
+            <?php for ($i=1; $i<=10; $i++): ?>
+              <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+            <?php endfor; ?>
+          </select>
+        </label>
+
+        <label><?php echo esc_html($label_from); ?>
+          <input type="date" name="start_date">
+        </label>
+
+        <label><?php echo esc_html($label_to); ?>
+          <input type="date" name="end_date">
+        </label>
+
+        <button type="submit"><?php echo esc_html($atts['button_text']); ?></button>
+      </form>
+    </div>
+  <?php
+  return ob_get_clean();
+});
+/* --------------------------------------------------
+ * Shortcode: [booking_cards]
+ * -------------------------------------------------- */
+add_shortcode('booking_cards', function () {
+
+  $title    = trim((string) get_theme_mod('snowfall_booking_cards_title', 'STARTA DITT ÄVENTYR'));
+  $subtitle = trim((string) get_theme_mod('snowfall_booking_cards_subtitle', ''));
+
+  ob_start(); ?>
+    <section class="booking-cards" aria-label="Bokningskategorier">
+      <div class="booking-cards__inner">
+
+        <?php if ($title !== ''): ?>
+          <h2 class="booking-cards__title"><?php echo esc_html($title); ?></h2>
+        <?php endif; ?>
+
+        <?php if ($subtitle !== ''): ?>
+          <p class="booking-cards__subtitle"><?php echo esc_html($subtitle); ?></p>
+        <?php endif; ?>
+
+        <div class="booking-cards__grid">
+          <?php for ($i = 1; $i <= 3; $i++):
+            $img_id  = (int) get_theme_mod("snowfall_booking_card_{$i}_image", 0);
+$fallback = ($i === 1 ? 'TURER' : ($i === 2 ? 'BOENDE' : 'RESTAURANG'));
+$text = trim((string) get_theme_mod("snowfall_booking_card_{$i}_text", $fallback));
+            $url     = trim((string) get_theme_mod("snowfall_booking_card_{$i}_url", ''));
+            $icon_id = (int) get_theme_mod("snowfall_booking_card_{$i}_icon", 0);
+
+            $img_url  = $img_id ? wp_get_attachment_image_url($img_id, 'large') : '';
+            if (!$img_url) continue;
+
+            $icon_url = $icon_id ? wp_get_attachment_image_url($icon_id, 'full') : '';
+
+            $tag   = $url ? 'a' : 'div';
+            $attrs = $url ? 'href="'.esc_url($url).'"' : '';
+          ?>
+            <<?php echo $tag; ?> class="booking-cards__card" <?php echo $attrs; ?>>
+              <img class="booking-cards__img" src="<?php echo esc_url($img_url); ?>" alt="">
+
+              <?php if ($icon_url): ?>
+                <img class="booking-cards__hex" src="<?php echo esc_url($icon_url); ?>" alt="" aria-hidden="true">
+              <?php endif; ?>
+
+              <?php if ($text !== ''): ?>
+                <div class="booking-cards__overlay">
+                  <span class="booking-cards__label"><?php echo esc_html($text); ?></span>
+                </div>
+              <?php endif; ?>
+            </<?php echo $tag; ?>>
+          <?php endfor; ?>
+        </div>
+
+      </div>
+    </section>
+  <?php
+  return ob_get_clean();
 });

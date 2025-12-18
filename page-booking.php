@@ -18,7 +18,12 @@ get_header();
 </section>
 
 <main class="page-content">
-  <br><br>
+ <?php
+  while ( have_posts() ) :
+    the_post();
+    the_content();
+  endwhile;
+  ?>
 </main>
 
 <?php get_footer(); ?>

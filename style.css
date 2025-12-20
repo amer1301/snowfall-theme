@@ -731,6 +731,7 @@ footer {
   border-top: 1px solid #262636;
   background: #C9D1E1;
   font-size: 1em;
+  margin-top: 3em;
 }
 
 .footer__small {
@@ -742,12 +743,14 @@ footer {
 body.page-booking {
 background-color: white;
 }
+
 .hero--booking{
   position: relative;
   height: 900px;
   overflow: hidden;
   background: #acbfc9;
 }
+
 
 .hero--booking .hero__top{
   position: absolute;
@@ -797,43 +800,68 @@ background-color: white;
   display: block;
 }
 
-/* Kalender på bokningssidan */
+/* =========================================================
+   BOOKINGBAR – inline felmeddelande
+   ========================================================= */
+.bookingbar__form.has-error [data-bb-error]{
+  display:block;
+  padding:10px 12px;
+  border:1px solid rgba(220, 38, 38, .35);
+  background: rgba(220, 38, 38, .08);
+  border-radius:12px;
+}
 
-.booking-calendar iframe{
+/* =========================================================
+   KALENDER på bokningssidan (wrapper + iframe)
+   ========================================================= */
+.booking-calendar.is-hidden { display: none; }
+.booking-calendar { scroll-margin-top: 120px; }
+
+.booking-calendar{
+  max-width: 1100px;
+  margin: 48px auto 80px;
+  padding: 0 16px;
+}
+
+#booking-calendar-iframe{
   width: 100%;
   height: 900px;
-  border: 0;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 18px;
+  background: #fff;
   display: block;
 }
 
-body.embed #site-header,
-body.embed header,
-body.embed .site-header,
-body.embed .tribe-events-header,
-body.embed h1,
-body.embed .entry-title {
-  display: none !important;
-}
+/* =========================================================
+   EMBED-LÄGE (events-sidan när den laddas med ?embed=1)
+   Du sätter body class 'is-embed' i functions.php
+   ========================================================= */
 
-body.embed {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
+/* Göm din site-header/nav i embed */
 .is-embed .site-header,
-.is-embed header.site-header,
+.is-embed header,
+.is-embed #site-header,
 .is-embed .nav,
 .is-embed .wp-site-blocks > header {
   display: none !important;
 }
 
-.is-embed body,
+/* Nollställ ev. toppmarginaler som kan komma från tema/adminbar */
 .is-embed {
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
 
-.tribe-events-view {
+/* Gör events-container snygg och centrerad */
+.is-embed .tribe-common-l-container,
+.is-embed .tribe-events-l-container{
+  max-width: 1100px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Kort-känsla runt hela kalendern */
+.is-embed .tribe-events-view{
   background: #fff;
   border: 1px solid rgba(0,0,0,.08);
   border-radius: 14px;
@@ -841,17 +869,21 @@ body.embed {
   padding: 18px;
 }
 
-.tribe-events-calendar-month__grid,
-.tribe-events-calendar-month__day {
-  border-color: rgba(0,0,0,.06) !important;
+/* =========================================================
+   THE EVENTS CALENDAR – månadsgrid (i embed)
+   ========================================================= */
+
+/* Låt TOP BAR vara kvar (det är där månad/år + navigation finns) */
+/* MEN dölj sökrutan/“Find Events”-delen och subscribe */
+.is-embed .tribe-events-c-search,
+.is-embed .tribe-events-c-top-bar__search,
+.is-embed .tribe-events-c-events-bar,
+.is-embed .tribe-events-c-subscribe-dropdown {
+  display: none !important;
 }
 
-.tribe-events-calendar-month__day-cell {
-  padding: 10px !important;
-  min-height: 90px;
-}
-
-.tribe-events-c-top-bar {
+/* Styla top-bar försiktigt (utan att gömma rubriken) */
+.is-embed .tribe-events-c-top-bar{
   display: flex;
   gap: 12px;
   align-items: center;
@@ -863,21 +895,39 @@ body.embed {
   margin-bottom: 14px;
 }
 
-.tribe-events-c-search__input {
+/* Gör datumknapp och nav lite rundare */
+.is-embed .tribe-events-c-top-bar__datepicker-button,
+.is-embed .tribe-events-c-top-bar__nav-link,
+.is-embed .tribe-common-c-btn,
+.is-embed .tribe-common-c-btn-border{
   border-radius: 10px !important;
-  border: 1px solid rgba(0,0,0,.12) !important;
-  padding: 10px 12px !important;
 }
 
-.tribe-common-c-btn,
-.tribe-common-c-btn-border {
-  border-radius: 10px !important;
-  padding: 10px 14px !important;
+/* Gridens linjer + cell-padding */
+.is-embed .tribe-events-calendar-month__grid,
+.is-embed .tribe-events-calendar-month__day{
+  border-color: rgba(0,0,0,.06) !important;
 }
 
-.tribe-events-c-top-bar__datepicker-button,
-.tribe-events-c-top-bar__nav-link {
-  border-radius: 10px !important;
+.is-embed .tribe-events-calendar-month__day-cell{
+  padding: 10px !important;
+  min-height: 90px;
+}
+
+.is-embed .tribe-events-calendar-month__day-date-daynum{
+  font-weight: 700;
+}
+
+/* Event-titlar i cellerna */
+.is-embed .tribe-events-calendar-month__calendar-event-title,
+.is-embed .tribe-events-calendar-month__calendar-event-title-link{
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+/* Valfritt: dölja "sub-nav" om den syns i ditt tema */
+.is-embed .tribe-events-sub-nav{
+  display: none !important;
 }
 
 .bookingbar{
@@ -942,7 +992,7 @@ body.embed {
   text-transform: uppercase;
   letter-spacing: .18em;
   font-size: 2em;
-  color: rgba(20, 35, 55, 0.85);
+  color: #0e2a3a;
   margin: 0 0 10px;
   position: relative;
 }
@@ -960,8 +1010,9 @@ body.embed {
   text-align: center;
   max-width: 760px;
   margin: 1em auto 22px;
-  color: rgba(0,0,0,.65);
+  color: #0e2a3a;
   font-size: 1em;
+   font-style: italic;
 }
 
 
@@ -1045,7 +1096,388 @@ body.embed {
   padding: 0 !important;
   border-radius: 0 !important;
   pointer-events: none;
-  
+}
+
+.is-embed .tribe-events-header,
+.is-embed .tribe-events-header__top-bar,
+.is-embed .tribe-events-c-top-bar,
+.is-embed .tribe-events-c-top-bar__datepicker,
+.is-embed .tribe-events-c-top-bar__datepicker-container {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.is-embed .tribe-events-c-top-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+.is-embed .tribe-events-c-top-bar__datepicker-button,
+.is-embed .tribe-events-c-top-bar__nav-link {
+  display: inline-flex !important;
+  visibility: visible !important;
+}
+
+.is-embed .tribe-events-c-search,
+.is-embed .tribe-events-c-top-bar__search,
+.is-embed .tribe-events-c-events-bar,
+.is-embed .tribe-events-c-subscribe-dropdown {
+  display: none !important;
+}
+
+/* Aktivitetssida */
+.hero--activities{
+  position: relative;
+  height: 900px;
+  overflow: hidden;
+  background-image: url("/wp-content/themes/snowfall-theme/assets/images/header-2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #fff;
+}
+
+.hero--activities::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.45) 0%,
+    rgba(0,0,0,0.30) 45%,
+    rgba(0,0,0,0.10) 75%,
+    rgba(0,0,0,0.00) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero--activities::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 220px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.65) 55%,
+    rgba(255,255,255,1) 100%
+  );
+
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero--activities > *{
+  position: relative;
+  z-index: 3;
+}
+
+.hero--activities h1,
+.hero--activities h2,
+.hero--activities p{
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+}
+
+.hero--activities .hero__content{
+  max-width: 900px;
+  padding: 80px 24px 0;
+}
+
+.activities-hex{
+  --hex-size: 260px;
+  --col-gap: 28px;
+  --row-overlap: 70px;
+
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(6, calc(var(--hex-size) / 2));
+  column-gap: calc(var(--col-gap) / 2);
+  row-gap: 0;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.activities-hex .hex-card{
+  width: var(--hex-size);
+}
+
+.activities-hex .hex-card:nth-child(1){ grid-column: 1 / span 2; grid-row: 1; }
+.activities-hex .hex-card:nth-child(2){ grid-column: 3 / span 2; grid-row: 1; }
+.activities-hex .hex-card:nth-child(3){ grid-column: 5 / span 2; grid-row: 1; }
+
+.activities-hex .hex-card:nth-child(4){ grid-column: 2 / span 2; grid-row: 2; }
+.activities-hex .hex-card:nth-child(5){ grid-column: 4 / span 2; grid-row: 2; }
+
+.activities-hex .hex-card:nth-child(6){ grid-column: 3 / span 2; grid-row: 3; }
+
+.activities-hex .hex-card:nth-child(n+4):nth-child(-n+5){
+  transform: translateY(calc(var(--row-overlap) * -1));
+}
+.activities-hex .hex-card:nth-child(6){
+  transform: translateY(calc(var(--row-overlap) * -2));
+}
+
+.hex{
+  width: 100%;
+  aspect-ratio: 1 / 1.08;
+  background-image: var(--hex-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(
+    50% 0%,
+    93% 25%,
+    93% 75%,
+    50% 100%,
+    7% 75%,
+    7% 25%
+  );
+}
+
+.hex::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.25) 0%,
+    rgba(0,0,0,0.45) 65%,
+    rgba(0,0,0,0.60) 100%
+  );
+}
+
+.hex__overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding: 22px;
+  z-index: 1;
+}
+
+.hex__title{
+  margin: 0 0 12px;
+  color: #fff;
+  line-height: 1.2;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+}
+
+.hex__btn{
+  appearance: none;
+  border: 1px solid rgba(255,255,255,0.75);
+  background: rgba(0,0,0,0.15);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.hex__btn:hover{
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.95);
+}
+
+.activity-detail{
+  margin-top: 28px;
+}
+
+.activity-detail__inner{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.activity-detail__media img{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+}
+
+.activity-detail{
+  margin-top: 28px;
+}
+
+.activity-detail__media{
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+.activity-detail__media img{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.activity-detail__media::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,1) 0%,
+    rgba(255,255,255,0.92) 10%,
+    rgba(255,255,255,0.55) 22%,
+    rgba(255,255,255,0.18) 34%,
+    rgba(255,255,255,0.00) 46%
+  );
+}
+.activity-detail__media::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.activity-detail__content{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+
+  padding: 90px 42px 42px;
+  max-width: 900px;
+}
+
+.activity-detail__content h3{
+  margin: 0 0 12px;
+  color: #fff;
+  line-height: 1.1;
+  text-shadow: 0 3px 22px rgba(0,0,0,0.60);
+}
+
+.activity-detail__text{
+  color: rgba(255,255,255,0.96);
+  text-shadow: 0 2px 14px rgba(0,0,0,0.55);
+}
+
+.activity-detail__content > h3,
+.activity-detail__content > .activity-detail__text{
+  display: inline-block;
+  max-width: 760px;
+
+  background: rgba(0,0,0,0.42);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  padding: 10px 14px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.activity-detail__text a{
+  color: #fff;
+  text-decoration: underline;
+}
+
+.activity-detail__inner,
+.activity-detail__media,
+.activity-detail__media img{
+  border-radius: 0 !important;
+}
+
+.activity-detail{
+  border-radius: 0 !important;
+  overflow: visible;
+}
+
+.hero--contact{
+  position: relative;
+  height: 900px;
+  overflow: hidden;
+  background-image: url("/wp-content/themes/snowfall-theme/assets/images/header3.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #fff;
+}
+.hero--contact canvas{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  background: none;
+}
+
+.hero--contact::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.45) 0%,
+    rgba(0,0,0,0.30) 45%,
+    rgba(0,0,0,0.10) 75%,
+    rgba(0,0,0,0.00) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero--contact .hero-pan__content{
+  position: relative;
+  z-index: 5;
+}
+
+canvas { background: transparent; }
+
+.hero--contact::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 220px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.65) 55%,
+    rgba(255,255,255,1) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero--contact > *{
+  position: relative;
+  z-index: 3;
+}
+
+.hero--contact h1,
+.hero--contact h2,
+.hero--contact p{
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+}
+
+.hero--contact .hero__content{
+  max-width: 900px;
+  padding: 80px 24px 0;
 }
 
 /* Mindre skärmbredd */
@@ -1057,8 +1489,25 @@ body.embed {
   }
 }
 
-
 @media (max-width: 900px) {
+   .activities-hex{
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    column-gap: 24px;
+    row-gap: 24px;
+  }
+  .activities-hex .hex-card{
+    width: 100%;
+    transform: none !important;
+  }
+  .activities-hex .hex-card:nth-child(1),
+  .activities-hex .hex-card:nth-child(2),
+  .activities-hex .hex-card:nth-child(3),
+  .activities-hex .hex-card:nth-child(4),
+  .activities-hex .hex-card:nth-child(5),
+  .activities-hex .hex-card:nth-child(6){
+    grid-column: auto;
+    grid-row: auto;
+  }
   .experiences__grid { 
     grid-template-columns: 1fr; gap: 40px; 
   }
@@ -1088,7 +1537,23 @@ body.embed {
   }
 }
 
+/* Mobil: mindre luft, mer kompakt */
+@media (max-width: 768px) {
+  .booking-calendar {
+    margin: 28px auto 56px;
+  }
+  #booking-calendar-iframe {
+    height: 750px;
+    border-radius: 14px;
+  }
+}
+
 @media (max-width: 700px){
+    .activity-detail__media{
+    min-height: 420px;
+    border-radius: 14px;
+  }
+
   .pan-banner__overlay{
     background: linear-gradient(
       0deg,

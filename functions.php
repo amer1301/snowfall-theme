@@ -59,14 +59,33 @@ add_action('wp_enqueue_scripts', function () {
   );
 
   wp_enqueue_script(
-  'snowfall-bookingbar',
-  get_template_directory_uri() . '/assets/js/bookingbar.js',
-  [],
-  wp_get_theme()->get('Version'),
-  true
-);
-});
+    'snowfall-bookingbar',
+    get_template_directory_uri() . '/assets/js/bookingbar.js',
+    [],
+    wp_get_theme()->get('Version'),
+    true
+  );
 
+  if (is_page_template('page-activities.php')) {
+    wp_enqueue_script(
+      'snowfall-activities',
+      get_template_directory_uri() . '/assets/js/activities.js',
+      [],
+      wp_get_theme()->get('Version'),
+      true
+    );
+  }
+
+   if (is_page_template('page-contact.php')) {
+    wp_enqueue_script(
+      'snowfall-snow',
+      get_template_directory_uri() . '/assets/js/snow.js',
+      [],
+      wp_get_theme()->get('Version'),
+      true
+    );
+  }
+});
 
 /* --------------------------------------------------
  * Helper: Hero-text (front + booking) – hämtar olika settings
@@ -148,10 +167,6 @@ function snowfall_render_hero_pan_content(string $context = 'front', bool $show_
  * Customizer
  * -------------------------------------------------- */
 add_action('customize_register', function($wp_customize) {
-
-  /* ---------------------------
-   * HERO – Startsida
-   * --------------------------- */
   $wp_customize->add_section('snowfall_hero_front', [
     'title'    => 'Hero – Startsida',
     'priority' => 25,
@@ -220,11 +235,6 @@ add_action('customize_register', function($wp_customize) {
     'type'        => 'url',
     'description' => 'Ex: /kontakt/ eller #contact',
   ]);
-
-
-  /* ---------------------------
-   * HERO – Bokningssida
-   * --------------------------- */
   $wp_customize->add_section('snowfall_hero_booking', [
     'title'    => 'Hero – Bokningssida',
     'priority' => 26,
@@ -251,11 +261,6 @@ add_action('customize_register', function($wp_customize) {
     'label'       => 'Rubrik (du kan använda <br>)',
     'type'        => 'textarea',
   ]);
-
-
-  /* -------------------------------------------
-   * Quote-bar (under hero)
-   * ------------------------------------------- */
   $wp_customize->add_section('snowfall_quotebar', [
     'title'    => 'Quote-bar (under hero)',
     'priority' => 35,
@@ -280,11 +285,6 @@ add_action('customize_register', function($wp_customize) {
     'section' => 'snowfall_quotebar',
     'type'    => 'text',
   ]);
-
-
-  /* -------------------------------------------
-   * Scroll-pan banner (fullbredd bild + content)
-   * ------------------------------------------- */
   $wp_customize->add_section('snowfall_pan_banner', [
     'title'    => 'Bildsektion (scroll-pan)',
     'priority' => 37,
@@ -344,11 +344,6 @@ add_action('customize_register', function($wp_customize) {
     'type'        => 'url',
     'description' => 'Ex: https://... eller /undersida/',
   ]);
-
-
-  /* -------------------------------------------
-   * Split media-sektion (titel/text/knapp + 3 bilder)
-   * ------------------------------------------- */
   $wp_customize->add_section('snowfall_next_section', [
     'title'    => 'Nästa sektion (split media)',
     'priority' => 38,
@@ -416,9 +411,6 @@ add_action('customize_register', function($wp_customize) {
       ]
     ));
   }
-/* -------------------------------------------
- * Bookingbar – Labels
- * ------------------------------------------- */
 $wp_customize->add_section('snowfall_bookingbar_labels', [
   'title'    => 'Bookingbar – Texter',
   'priority' => 28,
@@ -445,17 +437,12 @@ foreach ($labels as $key => [$default, $label]) {
     'type'    => 'text',
   ]);
 }
-
-
-/* -------------------------------------------
- * Bookingbar – Tabs & knappar & värden
- * ------------------------------------------- */
 $wp_customize->add_section('snowfall_bookingbar_settings', [
   'title'    => 'Bookingbar – Inställningar',
   'priority' => 29,
 ]);
 
-$tab_defaults = ['Turer', 'Boende', 'Restaurang', 'Privat guide'];
+$tab_defaults = ['Turer', 'Boende', 'Restaurang'];
 for ($i = 1; $i <= 4; $i++) {
   $id = "snowfall_bookingbar_tab_{$i}";
 
@@ -470,7 +457,6 @@ for ($i = 1; $i <= 4; $i++) {
     'type'    => 'text',
   ]);
 }
-
 $wp_customize->add_setting('snowfall_bookingbar_button_text', [
   'default'           => 'Hitta tillgänglighet',
   'sanitize_callback' => 'sanitize_text_field',
@@ -530,10 +516,6 @@ $wp_customize->add_control('snowfall_bookingbar_guests_max', [
   'label'   => 'Gäster – max',
   'type'    => 'number',
 ]);
-/* --------------------------------------------------
- * Booking cards (sektion mellan bookingbar och kalender)
- * -------------------------------------------------- */
-
   $wp_customize->add_section('snowfall_booking_cards', [
     'title'    => 'Booking – Bildkort (över kalendern)',
     'priority' => 31,
@@ -631,7 +613,7 @@ add_filter('body_class', function ($classes) {
 });
 
 /* --------------------------------------------------
- * Shortcode: Bookingbar
+ * Shortcode
  * -------------------------------------------------- */
 add_shortcode('bookingbar', function($atts) {
 
@@ -639,12 +621,11 @@ add_shortcode('bookingbar', function($atts) {
     get_theme_mod('snowfall_bookingbar_tab_1', 'Turer'),
     get_theme_mod('snowfall_bookingbar_tab_2', 'Boende'),
     get_theme_mod('snowfall_bookingbar_tab_3', 'Restaurang'),
-    get_theme_mod('snowfall_bookingbar_tab_4', 'Privat guide'),
   ]));
 
   $atts = shortcode_atts([
     'tabs'        => $tabs_default,
-    'cat_slugs'   => 'turer,boende,restaurang,privat-guide',
+    'cat_slugs'   => 'turer,boende,restaurang',
     'active'      => (string) get_theme_mod('snowfall_bookingbar_active', 0),
     'button_text' => get_theme_mod('snowfall_bookingbar_button_text', 'Hitta tillgänglighet'),
   ], $atts, 'bookingbar');
@@ -712,9 +693,12 @@ add_shortcode('bookingbar', function($atts) {
               if (is_array($terms)) foreach ($terms as $t) $slugs[] = $t->slug;
               $dataCats = esc_attr(implode(',', $slugs));
             ?>
-              <option value="<?php echo esc_attr(get_the_title($ev)); ?>" data-cats="<?php echo $dataCats; ?>">
-                <?php echo esc_html(get_the_title($ev)); ?>
-              </option>
+<option
+  value="<?php echo esc_attr($ev->ID); ?>"
+  data-title="<?php echo esc_attr(get_the_title($ev)); ?>"
+  data-cats="<?php echo $dataCats; ?>">
+  <?php echo esc_html(get_the_title($ev)); ?>
+</option>
             <?php endforeach; ?>
           </select>
         </label>
@@ -741,9 +725,7 @@ add_shortcode('bookingbar', function($atts) {
   <?php
   return ob_get_clean();
 });
-/* --------------------------------------------------
- * Shortcode: [booking_cards]
- * -------------------------------------------------- */
+
 add_shortcode('booking_cards', function () {
 
   $title    = trim((string) get_theme_mod('snowfall_booking_cards_title', 'STARTA DITT ÄVENTYR'));
@@ -798,3 +780,13 @@ $text = trim((string) get_theme_mod("snowfall_booking_card_{$i}_text", $fallback
   <?php
   return ob_get_clean();
 });
+
+add_filter('tribe_events_views_v2_view_repository_args', function ($args, $view) {
+  if (!empty($_GET['bb_event_id'])) {
+    $id = absint($_GET['bb_event_id']);
+    if ($id) {
+      $args['post__in'] = [$id];
+    }
+  }
+  return $args;
+}, 10, 2);

@@ -1290,120 +1290,90 @@ background-color: white;
   border-color: rgba(255,255,255,0.95);
 }
 
-.activity-detail{
-  margin-top: 28px;
-}
-
-.activity-detail__inner{
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
-}
-
-.activity-detail__media img{
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 14px;
-}
+/* ==============================
+   Activity detail – referenslayout
+   ============================== */
 
 .activity-detail{
-  margin-top: 28px;
+  margin-top: 40px;
+  padding-bottom: 60px;
 }
 
-.activity-detail__media{
-  position: relative;
-  width: 100%;
-  max-width: 1100px;
+.activity-detail__wrap{
+  max-width: 1400px;
   margin: 0 auto;
-  overflow: hidden;
-  min-height: 500px;
 }
 
-.activity-detail__media img{
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.activity-detail__media::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,1) 0%,
-    rgba(255,255,255,0.92) 10%,
-    rgba(255,255,255,0.55) 22%,
-    rgba(255,255,255,0.18) 34%,
-    rgba(255,255,255,0.00) 46%
-  );
-}
-.activity-detail__media::after{
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
+.activity-detail__scene{
+  position: relative;
+  min-height: 720px;
 }
 
-.activity-detail__content{
+.activity-detail__card{
   position: absolute;
-  top: 0;
-  left: 0;
   right: 0;
-  z-index: 4;
-
-  padding: 90px 42px 42px;
-  max-width: 900px;
+  top: 0;
+  padding-top: 0.5em;
+  padding-right: 1em;
+  width: 82%;
+  min-height: 620px;
+  background-color: #fff;
+  background-image: url("/wp-content/themes/snowfall-theme/assets/images/mountain-sketch.png");
+  background-repeat: no-repeat;
+  background-size: 420px auto;
+  background-position: left 30px top 90px;
+  box-shadow: 0 18px 50px rgba(0,0,0,0.18);
+  z-index: 1;
 }
 
-.activity-detail__content h3{
-  margin: 0 0 12px;
-  color: #fff;
-  line-height: 1.1;
-  text-shadow: 0 3px 22px rgba(0,0,0,0.60);
+.activity-detail__title{
+  font-size: 3em;
+  line-height: 1.05;
+  margin: 0.3em auto;
+  text-align: center;
+  padding-left: 9em;
 }
 
 .activity-detail__text{
-  color: rgba(255,255,255,0.96);
-  text-shadow: 0 2px 14px rgba(0,0,0,0.55);
+  text-align: left;
+  max-width: 550px;
+  padding-top: 8.5em;
+  font-size: 1em;
+  line-height: 1.75;
+  color: rgba(0,0,0,0.78);
+  margin-left: auto;
 }
 
-.activity-detail__content > h3,
-.activity-detail__content > .activity-detail__text{
-  display: inline-block;
-  max-width: 760px;
-
-  background: rgba(0,0,0,0.42);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  padding: 10px 14px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+.activity-detail__media{
+  position: absolute;
+  left: 0;
+  top: 260px;
+  width: 58%;
+  z-index: 2;
 }
 
-.activity-detail__text a{
-  color: #fff;
-  text-decoration: underline;
-}
-
-.activity-detail__inner,
-.activity-detail__media,
 .activity-detail__media img{
-  border-radius: 0 !important;
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  display: block;
+}
+.activity-detail__inner{
+  position: relative;
+  min-height: 760px;
 }
 
-.activity-detail{
-  border-radius: 0 !important;
-  overflow: visible;
+.activity__line {
+  display: block;
+  width: 72px;
+  height: 3px;
+  background:rgba(20, 35, 55, 0.7);
+  opacity: 0.9;
+  align-self: left;
+  margin-top: 2.5em;
 }
 
+/* Kontakt-sida*/
 .hero--contact{
   position: relative;
   height: 900px;
@@ -1486,6 +1456,31 @@ canvas { background: transparent; }
   .news-hero__arrow--next{ right: 10px; }
   .news__layout{
     grid-template-columns: 1fr;
+  }
+
+  .activity-detail__scene{
+    min-height: 0;
+    padding-top: 0;
+  }
+
+  .activity-detail__card{
+    width: 100%;
+    min-height: 0;
+    margin-left: 0;
+    padding: 32px 24px;
+    background-size: 360px auto;
+  }
+
+  .activity-detail__media{
+    position: relative;
+    top: 0;
+    width: 100%;
+    max-width: none;
+    margin: 0 0 18px;
+  }
+
+  .activity-detail__media img{
+    height: 360px;
   }
 }
 

@@ -44,12 +44,10 @@ get_header();
             </div>
           </div>
 
-          <!-- Data som JS klonar in i #activity-detail -->
 <template class="js-activity-data" data-activity-id="<?php echo esc_attr($id); ?>">
   <section class="activity-detail__wrap">
     <div class="activity-detail__scene">
 
-      <!-- Textkort (bakom) -->
       <div class="activity-detail__card">
         <h3 class="activity-detail__title"><?php the_title(); ?></h3>
         <div class="activity-detail__text">
@@ -57,7 +55,6 @@ get_header();
         </div>
       </div>
 
-      <!-- Bild (framför) -->
       <figure class="activity-detail__media">
         <?php if ($img): ?>
           <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
@@ -71,7 +68,6 @@ get_header();
       <?php endwhile; wp_reset_postdata(); ?>
     </section>
 
-    <!-- Tom från början: JS fyller vid klick -->
     <section class="activity-detail" id="activity-detail" aria-live="polite"></section>
 
   <?php else: ?>

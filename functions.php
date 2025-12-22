@@ -87,6 +87,16 @@ add_action('wp_enqueue_scripts', function () {
   }
 });
 
+if (is_page_template('page-contact.php')) {
+  wp_enqueue_script(
+    'snowfall-contact',
+    get_template_directory_uri() . '/assets/js/contact.js',
+    [],
+    wp_get_theme()->get('Version'),
+    true
+  );
+}
+
 /* --------------------------------------------------
  * Helper: Hero-text (front + booking) – hämtar olika settings
  * -------------------------------------------------- */
@@ -103,7 +113,6 @@ function snowfall_get_hero_settings(string $context = 'front'): array {
     ];
   }
 
-  // default: front
   return [
     'eyebrow' => trim((string) get_theme_mod('snowfall_front_eyebrow', 'FJÄLLNÄRA NATURUPPLEVELSER')),
     'title'   => trim((string) get_theme_mod('snowfall_front_title', "Guidade vinterturer i<br>fjällen")),

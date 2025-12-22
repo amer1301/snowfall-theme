@@ -16,7 +16,10 @@ Version: 1.0
 body.front-page{ margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background-color: rgb(238, 241, 247);
 ;}
 
-/* Header, navigering och logotyp */
+
+/* =========================================================
+   Header, navigering, logotyp
+   ========================================================= */
 .site-header{
   position: absolute;
   top: 1em;
@@ -83,7 +86,10 @@ body.front-page{ margin: 0; font-family: system-ui, -apple-system, Segoe UI, Rob
   text-decoration: underline;
 }
 
-/* Hero-sektion */
+
+/* =========================================================
+   Startsida
+   ========================================================= */
 .hero-pan{
   position: relative;
   height: 170vh;
@@ -164,8 +170,6 @@ h1 {
   border: 1px solid white;
 }
 
-/* Citat, dynamisk */
-
 .quote-bar {
   background: #C9D1E1;
   padding: 28px 25px;
@@ -213,7 +217,6 @@ h1 {
   font-size: 14px;
 }
 
-/* Scroll-pan banner */
 .pan-banner{
   position: relative;
   min-height: 100vh;
@@ -295,8 +298,6 @@ h1 {
   align-self: flex-start;
 }
 
-/* nästa sektion */
-
 .split-media {
   background: #eef1f7;
   padding: clamp(40px, 6vw, 80px) 0;
@@ -370,8 +371,10 @@ h1 {
 .split-media__img--b { grid-column: 1; grid-row: 2; }
 .split-media__img--c { grid-column: 2; grid-row: 1 / span 2; }
 
-/* Nyhetssektion */
 
+/* =========================================================
+   Nyhetssektion på startsidan
+   ========================================================= */
 .news__header{
   text-align: center;
 }
@@ -731,14 +734,16 @@ footer {
   border-top: 1px solid #262636;
   background: #C9D1E1;
   font-size: 1em;
-  margin-top: 3em;
 }
 
 .footer__small {
   font-size: 0.75em;
   opacity: 0.7;
 }
-/* Bokningssida */
+
+/* =========================================================
+   Bokningssidan
+   ========================================================= */
 
 body.page-booking {
 background-color: white;
@@ -750,7 +755,6 @@ background-color: white;
   overflow: hidden;
   background: #acbfc9;
 }
-
 
 .hero--booking .hero__top{
   position: absolute;
@@ -800,9 +804,6 @@ background-color: white;
   display: block;
 }
 
-/* =========================================================
-   BOOKINGBAR – inline felmeddelande
-   ========================================================= */
 .bookingbar__form.has-error [data-bb-error]{
   display:block;
   padding:10px 12px;
@@ -811,9 +812,6 @@ background-color: white;
   border-radius:12px;
 }
 
-/* =========================================================
-   KALENDER på bokningssidan (wrapper + iframe)
-   ========================================================= */
 .booking-calendar.is-hidden { display: none; }
 .booking-calendar { scroll-margin-top: 120px; }
 
@@ -832,12 +830,6 @@ background-color: white;
   display: block;
 }
 
-/* =========================================================
-   EMBED-LÄGE (events-sidan när den laddas med ?embed=1)
-   Du sätter body class 'is-embed' i functions.php
-   ========================================================= */
-
-/* Göm din site-header/nav i embed */
 .is-embed .site-header,
 .is-embed header,
 .is-embed #site-header,
@@ -846,13 +838,11 @@ background-color: white;
   display: none !important;
 }
 
-/* Nollställ ev. toppmarginaler som kan komma från tema/adminbar */
 .is-embed {
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
 
-/* Gör events-container snygg och centrerad */
 .is-embed .tribe-common-l-container,
 .is-embed .tribe-events-l-container{
   max-width: 1100px !important;
@@ -860,7 +850,6 @@ background-color: white;
   padding-bottom: 0 !important;
 }
 
-/* Kort-känsla runt hela kalendern */
 .is-embed .tribe-events-view{
   background: #fff;
   border: 1px solid rgba(0,0,0,.08);
@@ -869,12 +858,6 @@ background-color: white;
   padding: 18px;
 }
 
-/* =========================================================
-   THE EVENTS CALENDAR – månadsgrid (i embed)
-   ========================================================= */
-
-/* Låt TOP BAR vara kvar (det är där månad/år + navigation finns) */
-/* MEN dölj sökrutan/“Find Events”-delen och subscribe */
 .is-embed .tribe-events-c-search,
 .is-embed .tribe-events-c-top-bar__search,
 .is-embed .tribe-events-c-events-bar,
@@ -882,7 +865,6 @@ background-color: white;
   display: none !important;
 }
 
-/* Styla top-bar försiktigt (utan att gömma rubriken) */
 .is-embed .tribe-events-c-top-bar{
   display: flex;
   gap: 12px;
@@ -895,7 +877,6 @@ background-color: white;
   margin-bottom: 14px;
 }
 
-/* Gör datumknapp och nav lite rundare */
 .is-embed .tribe-events-c-top-bar__datepicker-button,
 .is-embed .tribe-events-c-top-bar__nav-link,
 .is-embed .tribe-common-c-btn,
@@ -903,7 +884,6 @@ background-color: white;
   border-radius: 10px !important;
 }
 
-/* Gridens linjer + cell-padding */
 .is-embed .tribe-events-calendar-month__grid,
 .is-embed .tribe-events-calendar-month__day{
   border-color: rgba(0,0,0,.06) !important;
@@ -918,14 +898,12 @@ background-color: white;
   font-weight: 700;
 }
 
-/* Event-titlar i cellerna */
 .is-embed .tribe-events-calendar-month__calendar-event-title,
 .is-embed .tribe-events-calendar-month__calendar-event-title-link{
   font-size: 13px;
   line-height: 1.2;
 }
 
-/* Valfritt: dölja "sub-nav" om den syns i ditt tema */
 .is-embed .tribe-events-sub-nav{
   display: none !important;
 }
@@ -985,8 +963,6 @@ background-color: white;
   cursor:pointer;
 }
 
-/* Booking cards section (över kalendern) */
-
    .booking-cards__title{
   text-align: center;
   text-transform: uppercase;
@@ -1014,7 +990,6 @@ background-color: white;
   font-size: 1em;
    font-style: italic;
 }
-
 
 .booking-cards {
   padding: 28px 16px 10px;
@@ -1129,7 +1104,9 @@ background-color: white;
   display: none !important;
 }
 
-/* Aktivitetssida */
+/* ==============================
+   Aktivitetssida
+   ============================== */
 .hero--activities{
   position: relative;
   height: 900px;
@@ -1290,10 +1267,6 @@ background-color: white;
   border-color: rgba(255,255,255,0.95);
 }
 
-/* ==============================
-   Activity detail – referenslayout
-   ============================== */
-
 .activity-detail{
   margin-top: 40px;
   padding-bottom: 60px;
@@ -1357,6 +1330,7 @@ background-color: white;
   height: 520px;
   object-fit: cover;
   display: block;
+  padding-bottom: 3em;
 }
 .activity-detail__inner{
   position: relative;
@@ -1373,7 +1347,9 @@ background-color: white;
   margin-top: 2.5em;
 }
 
-/* Kontakt-sida*/
+/* ==============================
+   Kontaktsida
+   ============================== */
 .hero--contact{
   position: relative;
   height: 900px;
@@ -1450,7 +1426,111 @@ canvas { background: transparent; }
   padding: 80px 24px 0;
 }
 
-/* Mindre skärmbredd */
+/* ==============================
+   Om-sida
+   ============================== */
+.hero--about{
+  position: relative;
+  height: 900px;
+  overflow: hidden;
+  background-image: url("/wp-content/themes/snowfall-theme/assets/images/header4.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #fff;
+}
+
+.contact-layout {
+  position: relative;
+  min-height: 60vh;
+  padding-bottom: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.contact-deco {
+  position: absolute;
+  bottom: 0;
+  width: min(520px, 40vw);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  opacity: 1;
+}
+
+.contact-deco--left {
+  left: 0;
+}
+
+.contact-deco--right {
+  right: 0;
+}
+
+.contact-card {
+  position: relative;
+  z-index: 2;
+  width: min(720px, 92vw);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.contact-card__title {
+  margin: 0 0 1rem;
+}
+
+.about-post {
+  display: grid;
+  grid-template-columns: minmax(280px, 520px) minmax(320px, 1fr);
+  gap: 2.5rem;
+  align-items: center;
+  padding: 3rem 1rem;
+}
+
+.about-post__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.about-post__content {
+  max-width: 680px;
+}
+
+.about-post__title {
+  margin: 0 0 0.75rem;
+  line-height: 1.1;
+}
+
+.about-post__divider {
+  display: block;
+  width: 220px;
+  max-width: 100%;
+  height: auto;
+  margin: 0 0 1.25rem;
+  opacity: 0.9;
+}
+
+.about-post__text p:first-child {
+  margin-top: 0;
+}
+
+.about-post__bottom-image {
+  display: block;
+  margin: 2.5rem auto 0;
+  width: 260px;
+  max-width: 100%;
+  opacity: 0.9;
+}
+
+/* ==============================
+   Responsivitet
+   ============================== */
 @media (max-width: 980px){
   .news-hero__arrow--prev{ left: 10px; }
   .news-hero__arrow--next{ right: 10px; }
@@ -1485,6 +1565,13 @@ canvas { background: transparent; }
 }
 
 @media (max-width: 900px) {
+  .about-post {
+    grid-template-columns: 1fr;
+  }
+
+  .about-post__divider {
+    width: 200px;
+  }
    .activities-hex{
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     column-gap: 24px;
@@ -1532,7 +1619,6 @@ canvas { background: transparent; }
   }
 }
 
-/* Mobil: mindre luft, mer kompakt */
 @media (max-width: 768px) {
   .booking-calendar {
     margin: 28px auto 56px;
@@ -1540,6 +1626,10 @@ canvas { background: transparent; }
   #booking-calendar-iframe {
     height: 750px;
     border-radius: 14px;
+  }
+  .contact-deco {
+    width: min(360px, 55vw);
+    opacity: 0.9;
   }
 }
 

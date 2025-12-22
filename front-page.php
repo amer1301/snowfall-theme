@@ -86,8 +86,7 @@ if ($exp_q->have_posts()) : ?>
 
 
 <?php
-// --- Scroll-pan banner (Customizer) ---
-// Bilden är ett attachment-id (eller tomt). Vi renderar sektionen bara om vi har en URL.
+// --- Scroll-pan banner ---
 $pan_image_id = get_theme_mod('snowfall_pan_banner_image', '');
 $pan_image_url = $pan_image_id ? wp_get_attachment_image_url($pan_image_id, 'full') : '';
 
@@ -125,7 +124,7 @@ $pan_btn_url  = get_theme_mod('snowfall_pan_banner_button_url', '');
 <?php endif; ?>
 
 <?php
-// --- nästa sektion (Customizer) ---
+// --- nästa sektion ---
 $next_title    = trim((string) get_theme_mod('snowfall_next_title', 'Lorem ipsum<br>&amp; dolor'));
 $next_text     = trim((string) get_theme_mod('snowfall_next_text', 'Lorem ipsum dolor sit amet...'));
 $next_btn_text = trim((string) get_theme_mod('snowfall_next_btn_text', 'Knapp'));
@@ -139,7 +138,6 @@ $next_img_1 = $next_img_1_id ? wp_get_attachment_image_url($next_img_1_id, 'larg
 $next_img_2 = $next_img_2_id ? wp_get_attachment_image_url($next_img_2_id, 'large') : '';
 $next_img_3 = $next_img_3_id ? wp_get_attachment_image_url($next_img_3_id, 'large') : '';
 
-// Rendera bara om något finns
 $has_next =
   ($next_title !== '' || $next_text !== '' || $next_btn_url !== '' || $next_img_1 || $next_img_2 || $next_img_3);
 ?>
@@ -150,7 +148,6 @@ $has_next =
 
     <div class="split-media__copy">
       <?php if ($next_title !== '') : ?>
-        <!-- Tillåter <br> i rubriken -->
         <h2 class="split-media__title"><?php echo wp_kses($next_title, ['br' => []]); ?></h2>
       <?php endif; ?>
 
@@ -194,7 +191,7 @@ $has_next =
 
 
 <?php
-// --- Nyhetssektion (Banner + sidopanel) ---
+// --- Nyhetssektion ---
 $news_heading = 'Nyhetssektion';
 
 
@@ -314,5 +311,4 @@ if ($featured_q->have_posts()) :
 
 
 <?php
-// Laddar in footer.php (sidans avslut: footer, scripts via wp_footer, osv.)
 get_footer();

@@ -19,12 +19,22 @@
   const total = track.children.length;
 
   // Dots
-  slides.forEach((_, i) => {
-    const b = document.createElement('button');
-    if (i === 0) b.classList.add('is-active');
-    dotsWrap.appendChild(b);
-    b.addEventListener('click', () => goTo(i + slides.length));
-  });
+// Dots
+slides.forEach((_, i) => {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.classList.add('exp-slider__dot');
+  b.setAttribute('aria-label', `Gå till bild ${i + 1}`);
+  if (i === 0) {
+    b.classList.add('is-active');
+    b.setAttribute('aria-current', 'true');
+  }
+
+  dotsWrap.appendChild(b);
+
+  b.addEventListener('click', () => goTo(i + slides.length));
+});
+
 
   const dots = Array.from(dotsWrap.children);
 
@@ -39,6 +49,11 @@
 
     dots.forEach(d => d.classList.remove('is-active'));
     dots[realIndex]?.classList.add('is-active');
+    dots.forEach((d, j) => {
+  d.classList.toggle('is-active', j === realIndex);
+  d.setAttribute('aria-current', j === realIndex ? 'true' : 'false');
+});
+
   }
 
   function goTo(i) {

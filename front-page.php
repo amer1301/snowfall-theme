@@ -7,17 +7,24 @@ $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
 
 <section class="hero-pan" id="top">
   <div class="hero-pan__sticky">
+
     <div class="hero-pan__media" aria-hidden="true">
-      <img class="hero-pan__img"
-           src="<?php echo get_template_directory_uri(); ?>/assets/images/hero.jpg"
-           alt="">
+      <img
+        class="hero-pan__img"
+        src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/hero.jpg'); ?>"
+        alt=""
+      >
+      <div class="hero-pan__overlay" aria-hidden="true"></div>
     </div>
 
-    <div class="hero-pan__overlay" aria-hidden="true"></div>
+<div class="hero-pan__inner">
+  <?php snowfall_render_hero_pan_content('front', true); ?>
+</div>
 
-    <?php snowfall_render_hero_pan_content('front', true); ?>
+
   </div>
 </section>
+
 
 <?php if ( $quote_text !== '' || $quote_author !== '' ) : ?>
 <section class="quote-bar">

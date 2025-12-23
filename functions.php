@@ -452,11 +452,12 @@ $wp_customize->add_section('snowfall_bookingbar_settings', [
 ]);
 
 $tab_defaults = ['Turer', 'Boende', 'Restaurang'];
-for ($i = 1; $i <= 4; $i++) {
+
+for ($i = 1; $i <= count($tab_defaults); $i++) {
   $id = "snowfall_bookingbar_tab_{$i}";
 
   $wp_customize->add_setting($id, [
-    'default'           => $tab_defaults[$i-1],
+    'default'           => $tab_defaults[$i - 1],
     'sanitize_callback' => 'sanitize_text_field',
   ]);
 

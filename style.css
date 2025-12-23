@@ -51,7 +51,7 @@ body.front-page{ margin: 0; font-family: system-ui, -apple-system, Segoe UI, Rob
 
 .nav{
   width: min(1200px, 92%);
-   margin: 2em auto 0;
+  margin: 2em auto 0;
   display: flex;
   align-items: center;
   gap: 24px;
@@ -75,7 +75,7 @@ body.front-page{ margin: 0; font-family: system-ui, -apple-system, Segoe UI, Rob
 .menu__list a{
   color: var(--text);
   text-decoration: none;
-  font-size: 1em;
+  font-size: 1.2em;
   opacity: 0.9;
   list-style: none; 
   white-space: nowrap;
@@ -134,7 +134,7 @@ body.front-page{ margin: 0; font-family: system-ui, -apple-system, Segoe UI, Rob
   pointer-events: none;
 }
 
-.hero-pan__inner{
+.hero-pan__content{
   position: relative;
   z-index: 2;
   height: 100%;
@@ -1031,6 +1031,7 @@ background-color: white;
   overflow: visible;
   text-decoration: none;
   transition: transform .25s ease, box-shadow .25s ease;
+  background-color: rgba(10, 18, 30, 0.01); 
 }
 
 .booking-cards__card:hover {
@@ -1263,6 +1264,7 @@ background-color: white;
   color: #fff;
   line-height: 1.2;
   text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+  background-color: rgba(10, 18, 30, 0.01); 
 }
 
 .hex__btn{

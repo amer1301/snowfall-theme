@@ -16,12 +16,9 @@ $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
       >
       <div class="hero-pan__overlay" aria-hidden="true"></div>
     </div>
-
-<div class="hero-pan__inner">
-  <?php snowfall_render_hero_pan_content('front', true); ?>
-</div>
-
-
+    <div class="hero-pan__content">
+      <?php snowfall_render_hero_pan_content('front', true); ?>
+    </div>
   </div>
 </section>
 

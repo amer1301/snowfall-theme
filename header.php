@@ -18,7 +18,17 @@
     class="logo__icon"
   >
 </a>
-<nav class="menu" aria-label="Huvudmeny">
+<button class="menu-toggle"
+        type="button"
+        aria-controls="primary-menu"
+        aria-expanded="false">
+  <span class="menu-toggle__bar"></span>
+  <span class="menu-toggle__bar"></span>
+  <span class="menu-toggle__bar"></span>
+  <span class="sr-only">Meny</span>
+</button>
+
+<nav class="menu" id="primary-menu" aria-label="Huvudmeny">
   <?php
   wp_nav_menu([
     'theme_location' => 'primary',

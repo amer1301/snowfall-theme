@@ -66,6 +66,14 @@ add_action('wp_enqueue_scripts', function () {
     true
   );
 
+      wp_enqueue_script(
+    'snowfall-menu',
+    get_template_directory_uri() . '/assets/js/menu.js',
+    [],
+    wp_get_theme()->get('Version'),
+    true
+  );
+
   if (is_page_template('page-activities.php')) {
     wp_enqueue_script(
       'snowfall-activities',
@@ -85,8 +93,6 @@ add_action('wp_enqueue_scripts', function () {
       true
     );
   }
-});
-
 if (is_page_template('page-contact.php')) {
   wp_enqueue_script(
     'snowfall-contact',
@@ -96,6 +102,7 @@ if (is_page_template('page-contact.php')) {
     true
   );
 }
+});
 
 /* --------------------------------------------------
  * Helper: Hero-text (front + booking) – hämtar olika settings

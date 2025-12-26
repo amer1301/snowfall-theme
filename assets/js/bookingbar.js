@@ -124,8 +124,12 @@ function setCategoryUI(bar, cat) {
 
   // label
   const labelEl = qs(bar, '[data-select-label]');
-  if (labelEl) labelEl.textContent = (cat === 'boende') ? 'Logi' : 'Aktivitet';
-
+if (labelEl) {
+  labelEl.textContent =
+    cat === 'boende' ? 'Logi' :
+    cat === 'restaurang' ? 'Boka bord' :
+    'Aktivitet';
+}
   // filter select options by data-cats
   const sel = qs(form, 'select[name="bb_event"]');
   if (sel) {

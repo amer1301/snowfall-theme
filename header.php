@@ -25,7 +25,6 @@
   <span class="menu-toggle__bar"></span>
   <span class="menu-toggle__bar"></span>
   <span class="menu-toggle__bar"></span>
-  <span class="sr-only">Meny</span>
 </button>
 
 <nav class="menu" id="primary-menu" aria-label="Huvudmeny">

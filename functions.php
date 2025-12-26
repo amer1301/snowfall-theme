@@ -182,6 +182,7 @@ function snowfall_render_hero_pan_content(string $context = 'front', bool $show_
 /* --------------------------------------------------
  * Customizer
  * -------------------------------------------------- */
+
 add_action('customize_register', function($wp_customize) {
   $wp_customize->add_section('snowfall_hero_front', [
     'title'    => 'Hero – Startsida',
@@ -251,6 +252,68 @@ add_action('customize_register', function($wp_customize) {
     'type'        => 'url',
     'description' => 'Ex: /kontakt/ eller #contact',
   ]);
+
+  $wp_customize->add_section('snowfall_front_puff', [
+    'title'    => __('Startsida: Puff', 'snowfall'),
+    'priority' => 35,
+  ]);
+
+  $wp_customize->add_setting('snowfall_puff_enabled', [
+    'default'           => false,
+    'sanitize_callback' => function($v){ return (bool) $v; },
+  ]);
+
+  $wp_customize->add_control('snowfall_puff_enabled', [
+    'type'    => 'checkbox',
+    'section' => 'snowfall_front_puff',
+    'label'   => __('Visa puff på startsidan', 'snowfall'),
+  ]);
+
+  $wp_customize->add_setting('snowfall_puff_title', [
+    'default'           => 'Vintersäsongen 2025 är öppen',
+    'sanitize_callback' => 'sanitize_text_field',
+  ]);
+
+  $wp_customize->add_control('snowfall_puff_title', [
+    'type'    => 'text',
+    'section' => 'snowfall_front_puff',
+    'label'   => __('Rubrik', 'snowfall'),
+  ]);
+
+  $wp_customize->add_setting('snowfall_puff_text', [
+    'default'           => 'Boka din plats i tid – begränsat antal platser på våra mest populära turer.',
+    'sanitize_callback' => 'sanitize_textarea_field',
+  ]);
+
+  $wp_customize->add_control('snowfall_puff_text', [
+    'type'    => 'textarea',
+    'section' => 'snowfall_front_puff',
+    'label'   => __('Text', 'snowfall'),
+  ]);
+
+  $wp_customize->add_setting('snowfall_puff_btn_text', [
+    'default'           => 'Boka vintertur',
+    'sanitize_callback' => 'sanitize_text_field',
+  ]);
+
+  $wp_customize->add_control('snowfall_puff_btn_text', [
+    'type'    => 'text',
+    'section' => 'snowfall_front_puff',
+    'label'   => __('Knapptext', 'snowfall'),
+  ]);
+
+  $wp_customize->add_setting('snowfall_puff_btn_url', [
+    'default'           => '',
+    'sanitize_callback' => 'esc_url_raw',
+  ]);
+
+  $wp_customize->add_control('snowfall_puff_btn_url', [
+    'type'        => 'url',
+    'section'     => 'snowfall_front_puff',
+    'label'       => __('Knapp-länk', 'snowfall'),
+    'description' => __('Ex: /booking/ eller en extern URL', 'snowfall'),
+  ]);
+  
   $wp_customize->add_section('snowfall_hero_booking', [
     'title'    => 'Hero – Bokningssida',
     'priority' => 26,

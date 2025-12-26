@@ -1,6 +1,11 @@
 <?php
 get_header();
 
+$puff_enabled  = (bool) get_theme_mod('snowfall_puff_enabled', false);
+$puff_title    = trim((string) get_theme_mod('snowfall_puff_title', ''));
+$puff_text     = trim((string) get_theme_mod('snowfall_puff_text', ''));
+$puff_btn_text = trim((string) get_theme_mod('snowfall_puff_btn_text', ''));
+$puff_btn_url  = trim((string) get_theme_mod('snowfall_puff_btn_url', ''));
 $quote_text   = trim( (string) get_theme_mod('snowfall_quote_text') );
 $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
 ?>
@@ -21,6 +26,28 @@ $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
     </div>
   </div>
 </section>
+
+<?php if ($puff_enabled && ($puff_title || $puff_text || $puff_btn_url)) : ?>
+<section class="front-puff" aria-label="Viktig information">
+  <div class="front-puff__inner">
+    <div class="front-puff__copy">
+      <?php if ($puff_title) : ?>
+        <h2 class="front-puff__title"><?php echo esc_html($puff_title); ?></h2>
+      <?php endif; ?>
+
+      <?php if ($puff_text) : ?>
+        <p class="front-puff__text"><?php echo nl2br(esc_html($puff_text)); ?></p>
+      <?php endif; ?>
+    </div>
+
+    <?php if ($puff_btn_url && $puff_btn_text) : ?>
+      <a class="btn front-puff__btn" href="<?php echo esc_url($puff_btn_url); ?>">
+        <?php echo esc_html($puff_btn_text); ?>
+      </a>
+    <?php endif; ?>
+  </div>
+</section>
+<?php endif; ?>
 
 
 <?php if ( $quote_text !== '' || $quote_author !== '' ) : ?>

@@ -58,13 +58,29 @@ add_action('wp_enqueue_scripts', function () {
     true
   );
 
-  wp_enqueue_script(
-    'snowfall-bookingbar',
-    get_template_directory_uri() . '/assets/js/bookingbar.js',
-    [],
-    wp_get_theme()->get('Version'),
-    true
-  );
+wp_enqueue_script(
+  'snowfall-bookingbar',
+  get_template_directory_uri() . '/assets/js/bookingbar.js',
+  [],
+  wp_get_theme()->get('Version'),
+  true
+);
+
+wp_localize_script('snowfall-bookingbar', 'SNOWFALL_BOOKINGBAR', [
+  'monthUrl' => home_url('/events/month/'),
+]);
+
+add_filter('body_class', function ($classes) {
+  if (!empty($_GET['snowfall_embed'])) {
+    $classes[] = 'is-embed';
+  }
+  return $classes;
+});
+
+add_filter('show_admin_bar', function ($show) {
+  if (!empty($_GET['snowfall_embed'])) return false;
+  return $show;
+});
 
       wp_enqueue_script(
     'snowfall-menu',
@@ -93,15 +109,6 @@ add_action('wp_enqueue_scripts', function () {
       true
     );
   }
-if (is_page_template('page-contact.php')) {
-  wp_enqueue_script(
-    'snowfall-contact',
-    get_template_directory_uri() . '/assets/js/contact.js',
-    [],
-    wp_get_theme()->get('Version'),
-    true
-  );
-}
 });
 
 /* --------------------------------------------------
@@ -302,17 +309,19 @@ add_action('customize_register', function($wp_customize) {
     'label'   => __('Knapptext', 'snowfall'),
   ]);
 
-  $wp_customize->add_setting('snowfall_puff_btn_url', [
-    'default'           => '',
-    'sanitize_callback' => 'esc_url_raw',
-  ]);
+$wp_customize->add_setting('snowfall_puff_btn_url', [
+  'default'           => '',
+  'sanitize_callback' => 'sanitize_text_field',
+]);
 
-  $wp_customize->add_control('snowfall_puff_btn_url', [
-    'type'        => 'url',
-    'section'     => 'snowfall_front_puff',
-    'label'       => __('Knapp-länk', 'snowfall'),
-    'description' => __('Ex: /booking/ eller en extern URL', 'snowfall'),
-  ]);
+
+$wp_customize->add_control('snowfall_puff_btn_url', [
+  'type'        => 'text',
+  'section'     => 'snowfall_front_puff',
+  'label'       => __('Knapp-länk', 'snowfall'),
+  'description' => __('Ex: /bokning/ eller https://…', 'snowfall'),
+]);
+
   
   $wp_customize->add_section('snowfall_hero_booking', [
     'title'    => 'Hero – Bokningssida',
@@ -323,6 +332,7 @@ add_action('customize_register', function($wp_customize) {
     'default'           => 'FJÄLLNÄRA NATURUPPLEVELSER',
     'sanitize_callback' => 'sanitize_text_field',
   ]);
+
   $wp_customize->add_control('snowfall_booking_eyebrow', [
     'section' => 'snowfall_hero_booking',
     'label'   => 'Överrubrik (eyebrow)',
@@ -335,11 +345,13 @@ add_action('customize_register', function($wp_customize) {
       return wp_kses((string) $value, ['br' => []]);
     },
   ]);
+
   $wp_customize->add_control('snowfall_booking_title', [
     'section'     => 'snowfall_hero_booking',
     'label'       => 'Rubrik (du kan använda <br>)',
     'type'        => 'textarea',
   ]);
+
   $wp_customize->add_section('snowfall_quotebar', [
     'title'    => 'Quote-bar (under hero)',
     'priority' => 35,
@@ -349,6 +361,7 @@ add_action('customize_register', function($wp_customize) {
     'default'           => 'En stillsam och mäktig vinterupplevelse. Guiderna var kunniga, trygga och gav oss minnen för livet.',
     'sanitize_callback' => 'sanitize_textarea_field',
   ]);
+
   $wp_customize->add_control('snowfall_quote_text', [
     'label'   => 'Citattext',
     'section' => 'snowfall_quotebar',
@@ -359,11 +372,13 @@ add_action('customize_register', function($wp_customize) {
     'default'           => 'Deltagare på vintervandring',
     'sanitize_callback' => 'sanitize_text_field',
   ]);
+
   $wp_customize->add_control('snowfall_quote_author', [
     'label'   => 'Avsändare',
     'section' => 'snowfall_quotebar',
     'type'    => 'text',
   ]);
+
   $wp_customize->add_section('snowfall_pan_banner', [
     'title'    => 'Bildsektion (scroll-pan)',
     'priority' => 37,
@@ -373,6 +388,7 @@ add_action('customize_register', function($wp_customize) {
     'default'           => 0,
     'sanitize_callback' => 'absint',
   ]);
+
   $wp_customize->add_control(new WP_Customize_Media_Control(
     $wp_customize,
     'snowfall_pan_banner_image',
@@ -387,6 +403,7 @@ add_action('customize_register', function($wp_customize) {
     'default'           => 'Våra upplevelser',
     'sanitize_callback' => 'sanitize_text_field',
   ]);
+
   $wp_customize->add_control('snowfall_pan_banner_title', [
     'label'   => 'Titel',
     'section' => 'snowfall_pan_banner',
@@ -397,6 +414,7 @@ add_action('customize_register', function($wp_customize) {
     'default'           => 'Kort beskrivning...',
     'sanitize_callback' => 'sanitize_textarea_field',
   ]);
+
   $wp_customize->add_control('snowfall_pan_banner_text', [
     'label'   => 'Text',
     'section' => 'snowfall_pan_banner',
@@ -407,6 +425,7 @@ add_action('customize_register', function($wp_customize) {
     'default'           => 'Knapp',
     'sanitize_callback' => 'sanitize_text_field',
   ]);
+
   $wp_customize->add_control('snowfall_pan_banner_button_text', [
     'label'   => 'Knapptext',
     'section' => 'snowfall_pan_banner',
@@ -417,12 +436,14 @@ add_action('customize_register', function($wp_customize) {
     'default'           => '',
     'sanitize_callback' => 'esc_url_raw',
   ]);
+
   $wp_customize->add_control('snowfall_pan_banner_button_url', [
     'label'       => 'Knapp-länk (URL)',
     'section'     => 'snowfall_pan_banner',
     'type'        => 'url',
     'description' => 'Ex: https://... eller /undersida/',
   ]);
+
   $wp_customize->add_section('snowfall_next_section', [
     'title'    => 'Nästa sektion (split media)',
     'priority' => 38,
@@ -434,6 +455,7 @@ add_action('customize_register', function($wp_customize) {
       return wp_kses((string) $value, ['br' => []]);
     },
   ]);
+
   $wp_customize->add_control('snowfall_next_title', [
     'section'     => 'snowfall_next_section',
     'label'       => 'Titel',
@@ -455,6 +477,7 @@ add_action('customize_register', function($wp_customize) {
     'default'           => 'Knapp',
     'sanitize_callback' => 'sanitize_text_field',
   ]);
+
   $wp_customize->add_control('snowfall_next_btn_text', [
     'section' => 'snowfall_next_section',
     'label'   => 'Knapptext',
@@ -465,6 +488,7 @@ add_action('customize_register', function($wp_customize) {
     'default'           => '',
     'sanitize_callback' => 'esc_url_raw',
   ]);
+
   $wp_customize->add_control('snowfall_next_btn_url', [
     'section'     => 'snowfall_next_section',
     'label'       => 'Knapp-länk (URL)',
@@ -490,6 +514,7 @@ add_action('customize_register', function($wp_customize) {
       ]
     ));
   }
+
 $wp_customize->add_section('snowfall_bookingbar_labels', [
   'title'    => 'Bookingbar – Texter',
   'priority' => 28,
@@ -516,6 +541,7 @@ foreach ($labels as $key => [$default, $label]) {
     'type'    => 'text',
   ]);
 }
+
 $wp_customize->add_section('snowfall_bookingbar_settings', [
   'title'    => 'Bookingbar – Inställningar',
   'priority' => 29,
@@ -537,10 +563,12 @@ for ($i = 1; $i <= count($tab_defaults); $i++) {
     'type'    => 'text',
   ]);
 }
+
 $wp_customize->add_setting('snowfall_bookingbar_button_text', [
   'default'           => 'Hitta tillgänglighet',
   'sanitize_callback' => 'sanitize_text_field',
 ]);
+
 $wp_customize->add_control('snowfall_bookingbar_button_text', [
   'section' => 'snowfall_bookingbar_settings',
   'label'   => 'Knapptext',
@@ -551,6 +579,7 @@ $wp_customize->add_setting('snowfall_bookingbar_active', [
   'default'           => 0,
   'sanitize_callback' => 'absint',
 ]);
+
 $wp_customize->add_control('snowfall_bookingbar_active', [
   'section' => 'snowfall_bookingbar_settings',
   'label'   => 'Default vald tab (0 = första)',
@@ -561,6 +590,7 @@ $wp_customize->add_setting('snowfall_bookingbar_rooms_min', [
   'default'           => 1,
   'sanitize_callback' => 'absint',
 ]);
+
 $wp_customize->add_control('snowfall_bookingbar_rooms_min', [
   'section' => 'snowfall_bookingbar_settings',
   'label'   => 'Rum – min',
@@ -571,6 +601,7 @@ $wp_customize->add_setting('snowfall_bookingbar_rooms_max', [
   'default'           => 6,
   'sanitize_callback' => 'absint',
 ]);
+
 $wp_customize->add_control('snowfall_bookingbar_rooms_max', [
   'section' => 'snowfall_bookingbar_settings',
   'label'   => 'Rum – max',
@@ -591,11 +622,13 @@ $wp_customize->add_setting('snowfall_bookingbar_guests_max', [
   'default'           => 10,
   'sanitize_callback' => 'absint',
 ]);
+
 $wp_customize->add_control('snowfall_bookingbar_guests_max', [
   'section' => 'snowfall_bookingbar_settings',
   'label'   => 'Gäster – max',
   'type'    => 'number',
 ]);
+
   $wp_customize->add_section('snowfall_booking_cards', [
     'title'    => 'Booking – Bildkort (över kalendern)',
     'priority' => 31,
@@ -605,6 +638,7 @@ $wp_customize->add_control('snowfall_bookingbar_guests_max', [
     'default'           => 'STARTA DITT ÄVENTYR',
     'sanitize_callback' => 'sanitize_text_field',
   ]);
+
   $wp_customize->add_control('snowfall_booking_cards_title', [
     'section' => 'snowfall_booking_cards',
     'label'   => 'Rubrik',
@@ -854,7 +888,6 @@ $text = trim((string) get_theme_mod("snowfall_booking_card_{$i}_text", $fallback
             </<?php echo $tag; ?>>
           <?php endfor; ?>
         </div>
-
       </div>
     </section>
   <?php
@@ -870,6 +903,101 @@ add_filter('tribe_events_views_v2_view_repository_args', function ($args, $view)
   }
   return $args;
 }, 10, 2);
+
+/* =========================================================
+   HTML-validator fixes och events calender
+   ========================================================= */
+
+/**
+ * Tar bort inline CSS för wp-block-paragraph (där rotate: kan ligga)
+ */
+add_action('wp_enqueue_scripts', function () {
+  wp_deregister_style('wp-block-paragraph');
+  wp_dequeue_style('wp-block-paragraph');
+}, 100);
+
+/**
+ * Tar bort fetchpriority-attribut från <img> (för HTML-validator)
+ */
+add_filter('wp_get_attachment_image_attributes', function ($attr) {
+  if (isset($attr['fetchpriority'])) {
+    unset($attr['fetchpriority']);
+  }
+  return $attr;
+}, 10, 1);
+
+/**
+ * Tar bort <script type="speculationrules"> för HTML-validering
+ */
+add_action('template_redirect', function () {
+  ob_start(function ($html) {
+    return preg_replace(
+      '#<script[^>]+type=["\']speculationrules["\'][^>]*>.*?</script>#is',
+      '',
+      $html
+    );
+  });
+});
+
+/**
+ * Anpassningar för single events (The Events Calendar) – endast i iframe/embed-läge
+ */
+add_action('wp', function () {
+  if (is_admin()) return;
+
+  if (!is_singular('tribe_events')) return;
+
+  if (empty($_GET['snowfall_embed'])) return;
+
+  remove_action(
+    'tribe_events_single_event_after_the_content',
+    'tribe_events_single_event_add_cal_links'
+  );
+
+  remove_action(
+    'tribe_events_single_event_after_the_content',
+    'tribe_events_single_event_navigation'
+  );
+});
+
+/**
+ * Ta bort "Detta evenemang har redan ägt rum" – endast i embed/iframe-läge
+ */
+add_filter('tribe_events_event_schedule_details', function ($schedule, $event_id) {
+  if (!is_singular('tribe_events')) return $schedule;
+  if (empty($_GET['snowfall_embed'])) return $schedule;
+
+  return '';
+}, 10, 2);
+
+/**
+ * Add embed body class for iframe views
+ */
+add_action('template_redirect', function () {
+  if (!empty($_GET['snowfall_embed'])) {
+    add_filter('body_class', function ($classes) {
+      $classes[] = 'is-embed';
+      return $classes;
+    });
+  }
+});
+
+add_action('wp_footer', function () { ?>
+  <script>
+    (function () {
+      if (window.self !== window.top) {
+        document.documentElement.classList.add('is-embed');
+        if (document.body) document.body.classList.add('is-embed');
+      }
+
+      const qs = new URLSearchParams(window.location.search);
+      if (qs.has('snowfall_embed')) {
+        document.documentElement.classList.add('is-embed');
+        if (document.body) document.body.classList.add('is-embed');
+      }
+    })();
+  </script>
+<?php });
 
 /* --------------------------------------------------
  * Nyckelpersoner / Team (CPT)

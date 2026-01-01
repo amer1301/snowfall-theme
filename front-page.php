@@ -1,6 +1,7 @@
 <?php
 get_header();
 
+$news_url = site_url('/nyheter/');
 $puff_enabled  = (bool) get_theme_mod('snowfall_puff_enabled', false);
 $puff_title    = trim((string) get_theme_mod('snowfall_puff_title', ''));
 $puff_text     = trim((string) get_theme_mod('snowfall_puff_text', ''));
@@ -9,6 +10,8 @@ $puff_btn_url  = trim((string) get_theme_mod('snowfall_puff_btn_url', ''));
 $quote_text   = trim( (string) get_theme_mod('snowfall_quote_text') );
 $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
 ?>
+
+<main id="main" role="main">
 
 <section class="hero-pan" id="top">
   <div class="hero-pan__sticky">
@@ -26,6 +29,8 @@ $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
     </div>
   </div>
 </section>
+
+<!-- Puff-framsida -->
 
 <?php if ($puff_enabled && ($puff_title || $puff_text || $puff_btn_url)) : ?>
 <section class="front-puff" aria-label="Viktig information">
@@ -49,6 +54,7 @@ $quote_author = trim( (string) get_theme_mod('snowfall_quote_author') );
 </section>
 <?php endif; ?>
 
+<!-- Citat-sektion -->
 
 <?php if ( $quote_text !== '' || $quote_author !== '' ) : ?>
 <section class="quote-bar">
@@ -155,7 +161,7 @@ $pan_btn_url  = get_theme_mod('snowfall_pan_banner_button_url', '');
 <?php endif; ?>
 
 <?php
-// --- nästa sektion ---
+// --- nästa sektion - skrollbild ---
 $next_title    = trim((string) get_theme_mod('snowfall_next_title', 'Lorem ipsum<br>&amp; dolor'));
 $next_text     = trim((string) get_theme_mod('snowfall_next_text', 'Lorem ipsum dolor sit amet...'));
 $next_btn_text = trim((string) get_theme_mod('snowfall_next_btn_text', 'Knapp'));
@@ -172,6 +178,8 @@ $next_img_3 = $next_img_3_id ? wp_get_attachment_image_url($next_img_3_id, 'larg
 $has_next =
   ($next_title !== '' || $next_text !== '' || $next_btn_url !== '' || $next_img_1 || $next_img_2 || $next_img_3);
 ?>
+
+// --- Split-media ---
 
 <?php if ($has_next) : ?>
 <section class="split-media" aria-label="<?php echo esc_attr( wp_strip_all_tags($next_title) ); ?>">
@@ -223,7 +231,7 @@ $has_next =
 
 <?php
 // --- Nyhetssektion ---
-$news_heading = 'Nyhetssektion';
+$news_heading = 'Nyheter';
 
 
 $featured_count = 3;
@@ -250,7 +258,7 @@ if ($featured_q->have_posts()) :
 
     <div class="news__layout">
 
-      <div class="news-hero" aria-label="Senaste nyheter">
+      <section class="news-hero" aria-label="Senaste nyheter">
         <button class="news-hero__arrow news-hero__arrow--prev" aria-label="Föregående">‹</button>
 
         <div class="news-hero__viewport">
@@ -262,7 +270,7 @@ if ($featured_q->have_posts()) :
               $excerpt   = get_the_excerpt();
             ?>
               <article class="news-hero__slide">
-                <a class="news-hero__link" href="<?php the_permalink(); ?>">
+                <a class="news-hero__link" href="<?php echo esc_url($news_url); ?>"> 
                   <div class="news-hero__media" aria-hidden="true">
                     <?php if ($thumb_url) : ?>
                       <img class="news-hero__img" src="<?php echo esc_url($thumb_url); ?>" alt="" loading="lazy">
@@ -286,7 +294,7 @@ if ($featured_q->have_posts()) :
         <button class="news-hero__arrow news-hero__arrow--next" aria-label="Nästa">›</button>
 
         <div class="news-hero__dots" aria-hidden="false"></div>
-      </div>
+       </section>
 
       <?php
       $sidebar_q = new WP_Query([
@@ -306,8 +314,8 @@ if ($featured_q->have_posts()) :
   <?php while ($sidebar_q->have_posts()) : $sidebar_q->the_post();
     $side_thumb = get_the_post_thumbnail_url(get_the_ID(), 'thumbnail');
   ?>
-    <li class="news-side__item">
-      <a class="news-side__link" href="<?php the_permalink(); ?>">
+<li class="news-side__item">
+  <a class="news-side__link" href="<?php echo esc_url($news_url); ?>">
         <span class="news-side__thumb" aria-hidden="true">
           <?php if ($side_thumb) : ?>
             <img src="<?php echo esc_url($side_thumb); ?>" alt="" loading="lazy">
@@ -325,13 +333,9 @@ if ($featured_q->have_posts()) :
   <?php endwhile; ?>
 </ul>
 
-        <a class="btn news-side__all"
-           href="<?php
-             $cat = get_category_by_slug('nyheter');
-             echo $cat ? esc_url(get_category_link($cat->term_id)) : esc_url(home_url('/'));
-           ?>">
-          Visa alla nyheter
-        </a>
+<a class="btn news-side__all" href="<?php echo esc_url($news_url); ?>">
+  Visa alla nyheter
+</a>
       </aside>
       <?php wp_reset_postdata(); endif; ?>
 

@@ -1,3 +1,18 @@
+/**
+ * Mobilmeny – hanterar öppning och stängning av navigationsmeny.
+ *
+ * Funktionalitet:
+ * - Öppnar/stänger menyn via toggle-knapp
+ * - Uppdaterar ARIA-attribut (`aria-expanded`) för tillgänglighet
+ * - Stänger menyn vid:
+ *   - klick på länk i menyn
+ *   - klick utanför menyn
+ *   - Escape-tangent
+ *   - växling till desktop-läge
+ *
+ * Initieras när DOM:en är laddad och körs endast om nödvändiga element finns.
+ */
+
 document.addEventListener("DOMContentLoaded", () => {
   const toggle = document.querySelector(".menu-toggle");
   const menu = document.querySelector(".menu");

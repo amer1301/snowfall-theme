@@ -7,7 +7,7 @@ get_header();
   <?php snowfall_render_hero_pan_content('activities', false); ?>
 </section>
 
-<main class="page-content">
+<main id="main" role="main" class="page-content">
 
   <?php
   while ( have_posts() ) :

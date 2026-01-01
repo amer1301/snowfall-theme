@@ -1,8 +1,19 @@
+/**
+ * Initierar klickbara aktiviteter och visar tillhörande detaljinformation.
+ *
+ * - Lyssnar på klick på element med `.js-activity-open`
+ * - Hämtar rätt <template> baserat på `data-activity-id`
+ * - Renderar innehållet i `#activity-detail`
+ * - Markerar aktiv knapp
+ * - Scrollar mjukt till detaljsektionen
+ *
+ * Körs automatiskt när DOM:en är redo.
+ */
+
 function initActivitiesHex() {
   const detail = document.querySelector("#activity-detail");
   if (!detail) return;
 
-  // Viktigt: gör den tom vid start
   detail.innerHTML = "";
 
   const buttons = document.querySelectorAll(".js-activity-open");
@@ -22,14 +33,11 @@ function initActivitiesHex() {
     const tpl = getTemplateById(id);
     if (!tpl) return;
 
-    // rendera innehåll
     detail.innerHTML = "";
     detail.appendChild(tpl.content.cloneNode(true));
 
-    // valfritt: markera aktiv knapp
     setActiveButton(clickedBtn);
 
-    // scrolla till detaljen
     detail.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 

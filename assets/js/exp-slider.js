@@ -1,3 +1,18 @@
+/**
+ * Exp-slider – horisontell slider med infinite loop och navigeringspunkter.
+ *
+ * Funktionalitet:
+ * - Skapar en oändlig slider genom att duplicera slides före och efter originalen
+ * - Navigering via pilar (föregående / nästa)
+ * - Navigering via dots med ARIA-stöd
+ * - Håller aktiv slide och aktiv dot i synk
+ * - Använder CSS transform + transition för mjuka förflyttningar
+ *
+ * Slidern initieras automatiskt om `.exp-slider` finns på sidan
+ * och körs inkapslad i en IIFE för att undvika globala variabler.
+ */
+
+
 (() => {
   const root = document.querySelector('.exp-slider');
   if (!root) return;
@@ -11,15 +26,12 @@
   const gap = parseFloat(getComputedStyle(track).gap);
   const slideWidth = slides[0].getBoundingClientRect().width + gap;
 
-  // Duplicera slides för infinite loop
   slides.forEach(s => track.appendChild(s.cloneNode(true)));
   slides.forEach(s => track.insertBefore(s.cloneNode(true), track.firstChild));
 
   let index = slides.length;
   const total = track.children.length;
 
-  // Dots
-// Dots
 slides.forEach((_, i) => {
   const b = document.createElement('button');
   b.type = 'button';

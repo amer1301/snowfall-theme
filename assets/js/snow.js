@@ -1,3 +1,19 @@
+/**
+ * Snow hero – canvasbaserad snöanimation för hero-sektion.
+ *
+ * Funktionalitet:
+ * - Renderar animerade snöflingor med HTML5 canvas
+ * - Anpassar canvasstorlek efter hero-elementet
+ * - Animerar flingor med fallrörelse och lätt sidodrift
+ * - Påverkar snöflingor dynamiskt baserat på musposition
+ * - Återställer flingor när de lämnar synligt område
+ * - Skalar om och återskapar flingor vid resize
+ *
+ * Animationen körs via `requestAnimationFrame` (med fallback)
+ * och initieras automatiskt när DOM:en är redo.
+ * Koden är inkapslad i en IIFE och körs i strict mode.
+ */
+
 (function () {
   "use strict";
 

@@ -8,7 +8,7 @@ get_header();
   <?php snowfall_render_hero_pan_content('contact', false); ?>
 </section>
 
-<main class="page-content contact-layout">
+<main id="main" role="main" class="page-content contact-layout">
 
   <img
     class="contact-deco contact-deco--left"

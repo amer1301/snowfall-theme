@@ -2,7 +2,7 @@
 get_header();
 ?>
 
-<main>
+<main id="main" role="main">
   <h1>Snowfall Adventures</h1>
 </main>
 

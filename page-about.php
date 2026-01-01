@@ -3,6 +3,8 @@
 get_header();
 ?>
 
+<main id="main" role="main">
+
 <section class="hero hero--about">
   <?php snowfall_render_hero_pan_content('about', false); ?>
 </section>
@@ -64,4 +66,5 @@ else : ?>
 />
 
 </main>
+
 <?php get_footer(); ?>

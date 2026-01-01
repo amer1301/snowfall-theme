@@ -1,3 +1,19 @@
+/**
+ * Bookingbar – hanterar kategorival, filtrering av aktiviteter och inladdning av bokningskalender.
+ *
+ * Funktionalitet:
+ * - Växlar mellan kategorier (turer, boende, restaurang) via tabs
+ * - Filtrerar dropdown-alternativ baserat på vald kategori
+ * - Validerar formulär (kategori, aktivitet, datumintervall)
+ * - Visar tillgänglighetskalender i iframe vid giltigt val
+ * - Visar inline-felmeddelanden med tillgänglighetsstöd (ARIA)
+ * - Aktiverar/inaktiverar submit-knapp baserat på formulärstatus
+ * - Döljer kalendern automatiskt vid ogiltiga val
+ *
+ * Kalendern laddas dynamiskt via iframe och scrollas in mjukt vid visning.
+ * Scriptet stödjer flera bookingbars på samma sida.
+ */
+
 const calendarCats = ['turer', 'boende', 'restaurang'];
 
 function qs(root, sel) {
@@ -70,13 +86,14 @@ function showCalendarFor({ startDate, cat, eventId }) {
   calWrap.setAttribute('aria-hidden', 'false');
 
   const params = new URLSearchParams({
-    embed: '1',
+    snowfall_embed: '1',
     'tribe-bar-date': startDate,
-    'tribe_event_category': cat, // valfritt, men bra om du vill
+    'tribe_event_category': cat,
     'bb_event_id': String(eventId || ''),
   });
 
-  iframe.src = `/events/month/?${params.toString()}`;
+  const base = (window.SNOWFALL_BOOKINGBAR && window.SNOWFALL_BOOKINGBAR.monthUrl) || '/events/month/';
+iframe.src = `${base}?${params.toString()}`;
   return true;
 }
 
@@ -85,7 +102,7 @@ function showCalendarFor({ startDate, cat, eventId }) {
  * ----------------------------- */
 function getFormState(form) {
   const cat = qs(form, 'input[name="bb_cat"]')?.value || '';
-  const activity = qs(form, '[data-activity-select]')?.value || ''; // eventId
+  const activity = qs(form, '[data-activity-select]')?.value || '';
   const start = qs(form, 'input[name="start_date"]')?.value || '';
   const end = qs(form, 'input[name="end_date"]')?.value || '';
   return { cat, activity, start, end };
@@ -93,7 +110,7 @@ function getFormState(form) {
 
 function isValidDateRange(start, end) {
   if (!start || !end) return false;
-  return end >= start; // ISO yyyy-mm-dd kan jämföras som sträng
+  return end >= start;
 }
 
 function updateSubmitEnabled(form) {
@@ -118,11 +135,9 @@ function setCategoryUI(bar, cat) {
   const form = qs(bar, '[data-bookingbar-form]');
   if (!form) return;
 
-  // set hidden cat
   const hiddenCat = qs(form, 'input[name="bb_cat"]');
   if (hiddenCat) hiddenCat.value = cat;
 
-  // label
   const labelEl = qs(bar, '[data-select-label]');
 if (labelEl) {
   labelEl.textContent =
@@ -130,20 +145,18 @@ if (labelEl) {
     cat === 'restaurang' ? 'Boka bord' :
     'Aktivitet';
 }
-  // filter select options by data-cats
+
   const sel = qs(form, 'select[name="bb_event"]');
   if (sel) {
     const options = Array.from(sel.options);
 
     options.forEach((opt) => {
-      if (!opt.value) { opt.hidden = false; return; } // "Välj…"
+      if (!opt.value) { opt.hidden = false; return; }
       const cats = (opt.dataset.cats || '').split(',').filter(Boolean);
 
-      // STRIKT filtrering: måste matcha aktuell kategori
       opt.hidden = !cats.includes(cat);
     });
 
-    // om nuvarande val är dolt -> nollställ
     if (sel.selectedOptions[0] && sel.selectedOptions[0].hidden) {
       sel.value = '';
     }
@@ -152,7 +165,6 @@ if (labelEl) {
   clearInlineError(form);
   updateSubmitEnabled(form);
 
-  // Om kategori är okänd (ska inte hända) så göm kalender
   if (cat && !calendarCats.includes(cat)) {
     hideCalendar();
   }
@@ -162,14 +174,11 @@ function initBookingbar(bar) {
   const form = qs(bar, '[data-bookingbar-form]');
   if (!form) return;
 
-  // Init: filtrera dropdown för default tab
   const cat = qs(form, 'input[name="bb_cat"]')?.value || '';
   setCategoryUI(bar, cat);
 
-  // Startläge: kalender ska vara dold
   hideCalendar();
 
-  // Knappen i sync
   updateSubmitEnabled(form);
 }
 
@@ -191,15 +200,13 @@ document.addEventListener('click', (e) => {
   const form = qs(bar, '[data-bookingbar-form]');
   if (!form) return;
 
-  // tab UI
-  bar.querySelectorAll('[data-tab]').forEach((b) => {
-    b.classList.remove('is-active');
-    b.setAttribute('aria-selected', 'false');
-  });
-  tabBtn.classList.add('is-active');
-  tabBtn.setAttribute('aria-selected', 'true');
+bar.querySelectorAll('[data-tab]').forEach((b) => {
+  b.classList.remove('is-active');
+  b.setAttribute('aria-pressed', 'false');
+});
+tabBtn.classList.add('is-active');
+tabBtn.setAttribute('aria-pressed', 'true');
 
-  // Apply category + filter
   const cat = tabBtn.dataset.cat || '';
   setCategoryUI(bar, cat);
 });

@@ -23,6 +23,19 @@ body.front-page {
   ;
 }
 
+/* =========================================================
+   Tillgänglighet (WCAG)
+   ========================================================= */
+
+   :focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
 
 /* =========================================================
    Header, navigering, logotyp
@@ -131,39 +144,39 @@ body.front-page {
    Startsida
    ========================================================= */
 
-   .front-puff{
+.front-puff {
   padding: 22px 16px;
   background: #eef1f7;
 }
 
-.front-puff__inner{
+.front-puff__inner {
   max-width: 1100px;
   margin: 0 auto;
   padding: 18px 20px;
-  background: rgba(255,255,255,0.85);
-  border: 1px solid rgba(20,35,55,0.08);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(20, 35, 55, 0.08);
   border-radius: 18px;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
 }
 
-.front-puff__title{
+.front-puff__title {
   margin: 0 0 6px;
   font-size: clamp(18px, 2vw, 24px);
-  color: rgba(20,35,55,0.92);
+  color: rgba(20, 35, 55, 0.92);
 }
 
-.front-puff__text{
+.front-puff__text {
   margin: 0;
   max-width: 70ch;
-  color: rgba(20,35,55,0.78);
+  color: rgba(20, 35, 55, 0.78);
   line-height: 1.5;
 }
 
-.front-puff__btn{
+.front-puff__btn {
   white-space: nowrap;
 }
 
@@ -475,13 +488,13 @@ h1 {
   text-align: center;
 }
 
-.news__layout {
+.news .news__layout {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: start;
+  column-gap: 1em;
   padding-left: 0.5em;
   padding-right: 0.5em;
-  gap: 28px;
-  align-items: start;
 }
 
 .news__title {
@@ -856,7 +869,7 @@ body.page-booking {
 .hero--booking .hero__top {
   position: absolute;
   inset: 0;
-  background-image: url("/wp-content/themes/snowfall-theme/assets/images/header-top.jpg");
+  background-image: url("assets/images/header-top.jpg");
   background-size: cover;
   background-position: center;
   z-index: 1;
@@ -1220,7 +1233,7 @@ body.page-booking {
   position: relative;
   height: 900px;
   overflow: hidden;
-  background-image: url("/wp-content/themes/snowfall-theme/assets/images/header-2.png");
+  background-image: url("assets/images/header-2.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1416,7 +1429,7 @@ body.page-booking {
   width: 82%;
   min-height: 620px;
   background-color: #fff;
-  background-image: url("/wp-content/themes/snowfall-theme/assets/images/mountain-sketch.png");
+  background-image: url("assets/images/mountain-sketch.png");
   background-repeat: no-repeat;
   background-size: 420px auto;
   background-position: left 30px top 90px;
@@ -1480,7 +1493,7 @@ body.page-booking {
   position: relative;
   height: 900px;
   overflow: hidden;
-  background-image: url("/wp-content/themes/snowfall-theme/assets/images/header3.jpg");
+  background-image: url("assets/images/header3.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1577,11 +1590,16 @@ canvas {
   backdrop-filter: blur(6px);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
 }
 
 .contact-card__title {
-  margin: 0 0 1rem;
+    margin: 0 0 14px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: 0.2px;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 .contact-layout {
@@ -1593,6 +1611,38 @@ canvas {
   overflow: hidden;
 }
 
+.contact-card__content {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  max-width: 72ch;
+}
+
+.contact-card__content p {
+  margin: 0 0 14px;
+}
+
+.contact-card__content h2,
+.contact-card__content h3 {
+  margin: 26px 0 10px;
+  line-height: 1.2;
+}
+
+.contact-card__content ul,
+.contact-card__content ol {
+  padding-left: 1.2rem;
+  margin: 0 0 14px;
+}
+
+.contact-card__content a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(20, 35, 55, 0.22);
+}
+
+.contact-card__content a:hover {
+  border-bottom-color: rgba(20, 35, 55, 0.55);
+}
+
 /* ==============================
    Om-sida
    ============================== */
@@ -1600,7 +1650,7 @@ canvas {
   position: relative;
   height: 900px;
   overflow: hidden;
-  background-image: url("/wp-content/themes/snowfall-theme/assets/images/header4.jpg");
+  background-image: url("assets/images/header4.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1645,8 +1695,14 @@ canvas {
   object-fit: cover;
 }
 
-.about-post__content {
+.about-post___content {
+  font-size: 1.05rem;
+  line-height: 1.75;
   max-width: 680px;
+}
+
+.about-post__content p {
+  margin: 0 0 14px;
 }
 
 .about-post__title {
@@ -1684,7 +1740,7 @@ canvas {
   position: relative;
   height: 900px;
   overflow: hidden;
-  background-image: url("/wp-content/themes/snowfall-theme/assets/images/header5.png");
+  background-image: url("assets/images/header5.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1925,12 +1981,29 @@ canvas {
   margin-right: 4em;
 }
 
+html.is-embed .tribe-events-notices,
+body.is-embed .tribe-events-notices {
+  display: none !important;
+}
+
+html.is-embed #wpadminbar { 
+  display: none !important; 
+}
+
+html.is-embed body.admin-bar {
+  margin-top: 0 !important;
+}
+html.is-embed {
+  margin-top: 0 !important;
+}
+
+
 /* ==============================
    Responsivitet
    ============================== */
 
-   @media (max-width: 1400px) {
-    .activity-detail__scene{
+@media (max-width: 1400px) {
+  .activity-detail__scene {
     position: relative;
     min-height: 0;
     display: grid;
@@ -1939,7 +2012,7 @@ canvas {
   }
 
   .activity-detail__card,
-  .activity-detail__media{
+  .activity-detail__media {
     position: relative;
     top: auto;
     left: auto;
@@ -1949,10 +2022,11 @@ canvas {
     border-radius: 20px;
   }
 
-  .activity-detail__media{
+  .activity-detail__media {
     order: 1;
   }
-  .activity-detail__card{
+
+  .activity-detail__card {
     order: 2;
     min-height: 0;
     padding: 28px 20px;
@@ -1960,22 +2034,24 @@ canvas {
     background-position: left 18px top 30px;
   }
 
-  .activity-detail__media img{
+  .activity-detail__media img {
     height: 320px;
     padding-bottom: 0;
     border-radius: 14px;
   }
 
-  .activity-detail__title{
+  .activity-detail__title {
     padding-left: 0;
     text-align: center;
     font-size: clamp(26px, 5vw, 40px);
     margin: 0 0 10px;
   }
-.activity__line {
+
+  .activity__line {
     margin-top: 5em;
-}
-  .activity-detail__text{
+  }
+
+  .activity-detail__text {
     margin-left: 0;
     max-width: none;
     padding-top: 0;
@@ -1985,51 +2061,38 @@ canvas {
 
     padding-bottom: 20px;
   }
-   }
+}
+
+@media (max-width: 1150px) {
+  .news .news__layout {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+  }
+}
 
 @media (max-width: 980px) {
-  .news-decor {
-    display: none;
-  }
-
-  .news-layout {
-    padding-bottom: 0;
-  }
-
-  .news-layout {
+  .news-page .news-layout {
     grid-template-columns: 1fr;
   }
 
-  .news-sidebar {
+  .news-page .news-sidebar {
     position: static;
   }
 
-  .news-hero__arrow--prev {
-    left: 10px;
+  .news-decor {
+    display: none;
   }
-
-  .news-hero__arrow--next {
-    right: 10px;
-  }
-
-  .news__layout {
-    grid-template-columns: 1fr;
-  }
-
-  .news-side {
-    margin-bottom: 1em;
-  }
-
 }
+
 
 @media (max-width: 900px) {
 
-   .bookingbar__form{
+  .bookingbar__form {
     grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
 
-  .bookingbar__form button{
+  .bookingbar__form button {
     grid-column: 1 / -1;
     width: 100%;
     justify-self: stretch;
@@ -2165,7 +2228,8 @@ canvas {
   .news-item--alt .news-item__media {
     order: initial;
   }
-.booking-cards__grid{
+
+  .booking-cards__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
   }
@@ -2201,14 +2265,24 @@ canvas {
 }
 
 @media (max-width: 700px) {
-    .front-puff__inner{
+    .contact-card {
+    padding: 22px 18px;
+    border-radius: 22px;
+  }
+
+  .contact-card::before {
+    height: 80px;
+  }
+  .front-puff__inner {
     flex-direction: column;
     align-items: stretch;
     text-align: center;
   }
-  .front-puff__btn{
+
+  .front-puff__btn {
     align-self: center;
   }
+
   .exp-slider__track {
     gap: 0;
   }
@@ -2265,7 +2339,8 @@ canvas {
   .pan-banner__btn {
     align-self: center;
   }
-    .about-post{
+
+  .about-post {
     grid-template-columns: 1fr;
     grid-template-areas:
       "media"
@@ -2276,42 +2351,42 @@ canvas {
     margin: 0 auto;
   }
 
-  .about-post--reverse{
+  .about-post--reverse {
     grid-template-areas:
       "media"
       "content";
   }
 
-  .about-post--right{
+  .about-post--right {
     margin-left: auto;
     margin-right: auto;
   }
 
-  .about-post__media img{
+  .about-post__media img {
     border-radius: 14px;
   }
 
-  .about-post__content{
+  .about-post__content {
     max-width: none;
   }
 
-  .about-post__title{
+  .about-post__title {
     margin-left: 0;
     text-align: center;
     font-size: 1.35rem;
   }
 
-  .about-post__divider{
+  .about-post__divider {
     margin: 0.75rem auto 1rem;
     width: min(200px, 70%);
   }
 
-  .about-post__text{
+  .about-post__text {
     text-align: left;
     line-height: 1.7;
   }
 
-  .about-post__bottom-image{
+  .about-post__bottom-image {
     width: min(220px, 70%);
     margin-top: 1.75rem;
   }
@@ -2355,34 +2430,36 @@ canvas {
 
 @media (max-width: 545px) {
 
-    .bookingbar__form{
+  .bookingbar__form {
     grid-template-columns: 1fr;
   }
 
-  .bookingbar__tabs button{
+  .bookingbar__tabs button {
     padding: 12px 10px;
     font-size: 14px;
   }
 
-  .bookingbar__form{
+  .bookingbar__form {
     padding: 12px;
   }
 
-  .bookingbar__form label{
+  .bookingbar__form label {
     font-size: 12px;
   }
 
   .bookingbar__form select,
-  .bookingbar__form input{
+  .bookingbar__form input {
     padding: 12px;
   }
 
-  .bookingbar__form button{
+  .bookingbar__form button {
     padding: 14px 16px;
   }
-   .booking-cards__grid{
+
+  .booking-cards__grid {
     grid-template-columns: 1fr;
   }
+
   .news-hero__link {
     height: auto;
     display: grid;
@@ -2414,4 +2491,59 @@ canvas {
     background: #fff;
     border-radius: 0 0 18px 18px;
   }
+}
+
+/* =========================================================
+   Nyckelpersoner / Team (CPT)
+   ========================================================= */
+.team {
+  margin: 3rem auto;
+  width: min(1100px, 92%);
+}
+
+.team__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.team-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.team__img img {
+  display: block;
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+.team__body {
+  padding: 1rem 1rem 1.25rem;
+}
+
+.team__name {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.team__role {
+  margin: 0.25rem 0 0.75rem;
+  opacity: 0.8;
+}
+
+.team__contact p {
+  margin: 0.25rem 0;
+}
+
+.team__contact a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.team__desc {
+  margin-top: 0.75rem;
 }

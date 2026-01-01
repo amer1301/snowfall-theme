@@ -10,7 +10,7 @@ get_header();
 
   <div class="hero__forest" aria-hidden="true">
     <img
-      src="<?php echo get_template_directory_uri(); ?>/assets/images/header.png"
+      src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/header.png'); ?>"
       alt=""
       class="hero__bottom"
     >

@@ -1,3 +1,21 @@
+/**
+ * News hero – horisontell slider för nyheter med autoplay och navigering.
+ *
+ * Funktionalitet:
+ * - Visar en nyhet i taget i full bredd
+ * - Navigering via pilar och dots
+ * - Autoplay med fast intervall
+ * - Pausar autoplay vid:
+ *   - hover
+ *   - fokus (keyboard)
+ *   - när fliken inte är aktiv
+ * - Håller aktiv slide och aktiv dot i synk
+ * - Anpassar position vid fönsterresize
+ *
+ * Slidern initieras automatiskt om `.news-hero` finns på sidan
+ * och körs inkapslad i en IIFE för att undvika globala variabler.
+ */
+
 (() => {
   const root = document.querySelector('.news-hero');
   if (!root) return;
@@ -13,7 +31,6 @@
   let timer = null;
   let isPaused = false;
 
-  // --- dots
   slides.forEach((_, i) => {
     const b = document.createElement('button');
     if (i === 0) b.classList.add('is-active');
@@ -43,7 +60,6 @@
   next?.addEventListener('click', nextSlide);
   prev?.addEventListener('click', prevSlide);
 
-  // --- autoplay
   const AUTOPLAY_MS = 5500;
 
   function startAutoplay() {
@@ -63,14 +79,12 @@
     startAutoplay();
   }
 
-  // paus vid hover
   root.addEventListener('mouseenter', () => { isPaused = true; });
   root.addEventListener('mouseleave', () => { isPaused = false; });
 
   root.addEventListener('focusin', () => { isPaused = true; });
   root.addEventListener('focusout', () => { isPaused = false; });
 
-  // paus när ej aktiv
   document.addEventListener('visibilitychange', () => {
     isPaused = document.hidden;
   });

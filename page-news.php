@@ -7,17 +7,16 @@ get_header();
   <?php snowfall_render_hero_pan_content('news', false); ?>
 </section>
 
-<main class="page-content news-page">
+<main id="main" role="main" class="page-content news-page">
 
   <?php
-  // Välj nyhet via query param: /nyheter/?news=slug
   $selected_slug = isset($_GET['news']) ? sanitize_title(wp_unslash($_GET['news'])) : '';
   $selected_post = null;
 
   if ($selected_slug) {
     $selected_post = get_page_by_path($selected_slug, OBJECT, 'post');
     if ($selected_post && !has_category('nyheter', $selected_post)) {
-      $selected_post = null; // säkerställ att vi bara visar från kategorin "nyheter"
+      $selected_post = null;
     }
   }
   ?>
@@ -31,7 +30,6 @@ get_header();
     <section class="news-main" aria-label="Nyheter">
 
       <?php
-      // 1) Om användaren valt en nyhet i sidbaren: visa den överst
       if ($selected_post) :
         $selected_id = (int) $selected_post->ID;
         setup_postdata($GLOBALS['post'] = get_post($selected_id));
@@ -63,7 +61,6 @@ get_header();
       ?>
 
       <?php
-      // 2) Visa 3 nyheter (hela innehållet). Exkludera vald nyhet om den visas.
       $main_q = new WP_Query([
         'post_type'      => 'post',
         'post_status'    => 'publish',
@@ -110,8 +107,6 @@ get_header();
         <h3 class="news-sidebar__title">Tidigare nyheter</h3>
 
         <?php
-        // Sidebar: fler nyheter att klicka på.
-        // Vi tar fler än 3 så det faktiskt finns "tidigare".
         $side_q = new WP_Query([
           'post_type'      => 'post',
           'post_status'    => 'publish',

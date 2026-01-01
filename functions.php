@@ -870,3 +870,162 @@ add_filter('tribe_events_views_v2_view_repository_args', function ($args, $view)
   }
   return $args;
 }, 10, 2);
+
+/* --------------------------------------------------
+ * Nyckelpersoner / Team (CPT)
+ *
+ * Uppgiftskrav: "Presentation och kontakt-information till företagets nyckelpersoner".
+ *
+ * Lösning:
+ * - Custom Post Type: snowfall_person (slug: team)
+ * - Meta-fält: roll, telefon, e-post
+ * - Visning: shortcode [snowfall_team] (läggs i valfri sida, t.ex. Kontakt)
+ * -------------------------------------------------- */
+
+add_action('init', function () {
+  $labels = [
+    'name'               => __('Nyckelpersoner', 'snowfall-theme'),
+    'singular_name'      => __('Nyckelperson', 'snowfall-theme'),
+    'add_new'            => __('Lägg till ny', 'snowfall-theme'),
+    'add_new_item'       => __('Lägg till ny nyckelperson', 'snowfall-theme'),
+    'edit_item'          => __('Redigera nyckelperson', 'snowfall-theme'),
+    'new_item'           => __('Ny nyckelperson', 'snowfall-theme'),
+    'view_item'          => __('Visa nyckelperson', 'snowfall-theme'),
+    'search_items'       => __('Sök nyckelpersoner', 'snowfall-theme'),
+    'not_found'          => __('Inga nyckelpersoner hittades', 'snowfall-theme'),
+    'not_found_in_trash' => __('Inga nyckelpersoner i papperskorgen', 'snowfall-theme'),
+    'menu_name'          => __('Nyckelpersoner', 'snowfall-theme'),
+  ];
+
+  register_post_type('snowfall_person', [
+    'labels'       => $labels,
+    'public'       => true,
+    'menu_position'=> 21,
+    'menu_icon'    => 'dashicons-id',
+    'supports'     => ['title', 'editor', 'thumbnail'],
+    'has_archive'  => false,
+    'rewrite'      => ['slug' => 'team'],
+    'show_in_rest' => true,
+  ]);
+});
+
+add_action('add_meta_boxes', function () {
+  add_meta_box(
+    'snowfall_person_meta',
+    __('Kontaktuppgifter', 'snowfall-theme'),
+    'snowfall_render_person_metabox',
+    'snowfall_person',
+    'normal',
+    'high'
+  );
+});
+
+function snowfall_render_person_metabox($post): void {
+  wp_nonce_field('snowfall_person_save', 'snowfall_person_nonce');
+
+  $role  = (string) get_post_meta($post->ID, '_snowfall_person_role', true);
+  $phone = (string) get_post_meta($post->ID, '_snowfall_person_phone', true);
+  $email = (string) get_post_meta($post->ID, '_snowfall_person_email', true);
+  ?>
+  <p>
+    <label for="snowfall_person_role"><strong><?php esc_html_e('Roll / titel', 'snowfall-theme'); ?></strong></label><br>
+    <input type="text" id="snowfall_person_role" name="snowfall_person_role" value="<?php echo esc_attr($role); ?>" style="width:100%;" />
+  </p>
+
+  <p>
+    <label for="snowfall_person_phone"><strong><?php esc_html_e('Telefon', 'snowfall-theme'); ?></strong></label><br>
+    <input type="tel" id="snowfall_person_phone" name="snowfall_person_phone" value="<?php echo esc_attr($phone); ?>" style="width:100%;" />
+  </p>
+
+  <p>
+    <label for="snowfall_person_email"><strong><?php esc_html_e('E-post', 'snowfall-theme'); ?></strong></label><br>
+    <input type="email" id="snowfall_person_email" name="snowfall_person_email" value="<?php echo esc_attr($email); ?>" style="width:100%;" />
+  </p>
+  <?php
+}
+
+add_action('save_post_snowfall_person', function ($post_id) {
+  if (!isset($_POST['snowfall_person_nonce']) || !wp_verify_nonce($_POST['snowfall_person_nonce'], 'snowfall_person_save')) {
+    return;
+  }
+  if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+    return;
+  }
+  if (!current_user_can('edit_post', $post_id)) {
+    return;
+  }
+
+  $role  = isset($_POST['snowfall_person_role']) ? sanitize_text_field(wp_unslash($_POST['snowfall_person_role'])) : '';
+  $phone = isset($_POST['snowfall_person_phone']) ? sanitize_text_field(wp_unslash($_POST['snowfall_person_phone'])) : '';
+  $email = isset($_POST['snowfall_person_email']) ? sanitize_email(wp_unslash($_POST['snowfall_person_email'])) : '';
+
+  update_post_meta($post_id, '_snowfall_person_role', $role);
+  update_post_meta($post_id, '_snowfall_person_phone', $phone);
+  update_post_meta($post_id, '_snowfall_person_email', $email);
+});
+
+add_shortcode('snowfall_team', function ($atts = []) {
+  $atts = shortcode_atts([
+    'count' => -1,
+  ], $atts, 'snowfall_team');
+
+  $q = new WP_Query([
+    'post_type'      => 'snowfall_person',
+    'post_status'    => 'publish',
+    'posts_per_page' => (int) $atts['count'],
+    'orderby'        => 'menu_order',
+    'order'          => 'ASC',
+  ]);
+
+  if (!$q->have_posts()) {
+    return '';
+  }
+
+  ob_start();
+  ?>
+  <section class="team" aria-label="Nyckelpersoner">
+    <h2 class="team__title"><?php echo esc_html__('Nyckelpersoner', 'snowfall-theme'); ?></h2>
+    <div class="team__grid">
+      <?php
+      while ($q->have_posts()) :
+        $q->the_post();
+        $id = get_the_ID();
+        $role  = (string) get_post_meta($id, '_snowfall_person_role', true);
+        $phone = (string) get_post_meta($id, '_snowfall_person_phone', true);
+        $email = (string) get_post_meta($id, '_snowfall_person_email', true);
+        ?>
+        <article class="team__card">
+          <?php if (has_post_thumbnail($id)) : ?>
+            <div class="team__image">
+              <?php echo get_the_post_thumbnail($id, 'medium', ['alt' => '']); ?>
+            </div>
+          <?php endif; ?>
+
+          <h3 class="team__name"><?php echo esc_html(get_the_title($id)); ?></h3>
+
+          <?php if ($role !== '') : ?>
+            <p class="team__role"><?php echo esc_html($role); ?></p>
+          <?php endif; ?>
+
+          <div class="team__contact">
+            <?php if ($phone !== '') : ?>
+              <p><a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', $phone)); ?>"><?php echo esc_html($phone); ?></a></p>
+            <?php endif; ?>
+            <?php if ($email !== '') : ?>
+              <p><a href="mailto:<?php echo esc_attr($email); ?>"><?php echo esc_html($email); ?></a></p>
+            <?php endif; ?>
+          </div>
+
+          <div class="team__bio">
+            <?php the_content(); ?>
+          </div>
+        </article>
+        <?php
+      endwhile;
+      wp_reset_postdata();
+      ?>
+    </div>
+  </section>
+  <?php
+  return ob_get_clean();
+});

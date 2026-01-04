@@ -70,18 +70,6 @@ wp_localize_script('snowfall-bookingbar', 'SNOWFALL_BOOKINGBAR', [
   'monthUrl' => home_url('/events/month/'),
 ]);
 
-add_filter('body_class', function ($classes) {
-  if (!empty($_GET['snowfall_embed'])) {
-    $classes[] = 'is-embed';
-  }
-  return $classes;
-});
-
-add_filter('show_admin_bar', function ($show) {
-  if (!empty($_GET['snowfall_embed'])) return false;
-  return $show;
-});
-
       wp_enqueue_script(
     'snowfall-menu',
     get_template_directory_uri() . '/assets/js/menu.js',
@@ -970,28 +958,22 @@ add_filter('tribe_events_event_schedule_details', function ($schedule, $event_id
   return '';
 }, 10, 2);
 
-/**
- * Add embed body class for iframe views
- */
-add_action('template_redirect', function () {
+add_filter('body_class', function ($classes) {
   if (!empty($_GET['snowfall_embed'])) {
-    add_filter('body_class', function ($classes) {
-      $classes[] = 'is-embed';
-      return $classes;
-    });
+    $classes[] = 'is-embed';
   }
+  return $classes;
+});
+
+add_filter('show_admin_bar', function ($show) {
+  if (!empty($_GET['snowfall_embed'])) return false;
+  return $show;
 });
 
 add_action('wp_footer', function () { ?>
   <script>
     (function () {
       if (window.self !== window.top) {
-        document.documentElement.classList.add('is-embed');
-        if (document.body) document.body.classList.add('is-embed');
-      }
-
-      const qs = new URLSearchParams(window.location.search);
-      if (qs.has('snowfall_embed')) {
         document.documentElement.classList.add('is-embed');
         if (document.body) document.body.classList.add('is-embed');
       }

@@ -44,7 +44,7 @@ snowfall-theme/
 ├─ page-news.php
 ├─ style.css
 └─ README.md
-
+```
 ##🧭 Navigering
 
 Navigering hanteras via WordPress inbyggda menysystem och wp_nav_menu().

@@ -86,7 +86,8 @@ Temat är anpassat för pluginet The Events Calendar:
 - Förenklad vy vid embed/iframe-läge
 - Möjlighet att bädda in events via ?snowfall_embed=1
 
-##🖼️ Embed / iframe-läge
+🖼️ Embed / iframe-läge
+---
 Temat stöder ett särskilt embed-läge:
 - Aktiveras via URL-parametern ?snowfall_embed=1
 - Lägger till is-embed som body-class
@@ -94,7 +95,8 @@ Temat stöder ett särskilt embed-läge:
 - Anpassar layout för inbäddade vyer
 - Fallback-detektion via JavaScript när sidan visas i iframe
 
-##♿ Tillgänglighet
+♿ Tillgänglighet
+---
 Temat har utvecklats med fokus på tillgänglighet:
 - Semantisk HTML
 - Tydlig rubrikhierarki
@@ -103,7 +105,8 @@ Temat har utvecklats med fokus på tillgänglighet:
 - Testat med WAVE och HTML-validator
 Vissa WordPress-core-element har justerats för att undvika valideringsfel, vilket är dokumenterat i koden.
 
-##🔍 SEO
+🔍 SEO
+---
 SEO hanteras genom:
 - Strukturerad HTML
 - Korrekt rubrikanvändning
@@ -112,7 +115,8 @@ SEO hanteras genom:
 - Intern länkning mellan sidor
 SEO-strategi och genomförande beskrivs i projektrapporten.
 
-##🛠️ Installation
+🛠️ Installation
+---
 1. Ladda upp mappen snowfall-theme till /wp-content/themes/
 2. Aktivera temat via Utseende → Teman
 3. Skapa menyer via Utseende → Menyer

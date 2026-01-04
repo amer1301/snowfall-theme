@@ -46,12 +46,12 @@ snowfall-theme/
 └─ README.md
 ~~~
 
-##🧭 Navigering
+🧭 Navigering
 ---
 Navigering hanteras via WordPress inbyggda menysystem och wp_nav_menu().
 Administratörer kan skapa och redigera menyer via Utseende → Menyer utan att ändra kod.
 
-##🎛️ Anpassningsläge (Customizer)
+🎛️ Anpassningsläge (Customizer)
 ---
 Temat innehåller flera egna sektioner i Utseende → Anpassa, bland annat:
 - Webbplatsens identitet
@@ -64,20 +64,23 @@ Temat innehåller flera egna sektioner i Utseende → Anpassa, bland annat:
 - Inställningar för startsidan
 Dessa inställningar gör det möjligt att redigera globala och återkommande delar av webbplatsen utan teknisk kunskap.
 
-##👥 Nyckelpersoner / Personal
+👥 Nyckelpersoner / Personal
+---
 Temat innehåller en Custom Post Type (CPT) för nyckelpersoner/team.
 Funktioner:
 - Skapa och redigera nyckelpersoner via wp-admin
 - Stöd för titel, innehåll och bild
 - Visning via shortcode i valfri sida
 
-##📰 Nyheter
+📰 Nyheter
+---
 Nyhetsfunktionalitet bygger på WordPress inlägg:
 - Kategoriserade nyheter
 - Stöd för featured image
 - Egen sidmall för nyhetssida
 
-##📅 Events & bokning
+📅 Events & bokning
+---
 Temat är anpassat för pluginet The Events Calendar:
 - Anpassningar för validering och layout
 - Förenklad vy vid embed/iframe-läge

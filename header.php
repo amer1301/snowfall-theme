@@ -23,10 +23,12 @@
 <button class="menu-toggle"
         type="button"
         aria-controls="primary-menu"
-        aria-expanded="false">
-  <span class="menu-toggle__bar"></span>
-  <span class="menu-toggle__bar"></span>
-  <span class="menu-toggle__bar"></span>
+        aria-expanded="false"
+        aria-label="Öppna huvudmeny">
+  <span class="sr-only">Öppna huvudmeny</span>
+  <span class="menu-toggle__bar" aria-hidden="true"></span>
+  <span class="menu-toggle__bar" aria-hidden="true"></span>
+  <span class="menu-toggle__bar" aria-hidden="true"></span>
 </button>
 
 <nav class="menu" id="primary-menu" aria-label="Huvudmeny">

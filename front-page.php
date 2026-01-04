@@ -179,7 +179,7 @@ $has_next =
   ($next_title !== '' || $next_text !== '' || $next_btn_url !== '' || $next_img_1 || $next_img_2 || $next_img_3);
 ?>
 
-// --- Split-media ---
+<!-- Split-media -->
 
 <?php if ($has_next) : ?>
 <section class="split-media" aria-label="<?php echo esc_attr( wp_strip_all_tags($next_title) ); ?>">

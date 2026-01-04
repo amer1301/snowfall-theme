@@ -26,7 +26,7 @@ Temat är byggt med fokus på:
 
 ## 🧱 Temastruktur
 
-```text
+~~~text
 snowfall-theme/
 ├─ assets/
 │  ├─ images/
@@ -44,14 +44,15 @@ snowfall-theme/
 ├─ page-news.php
 ├─ style.css
 └─ README.md
-```
-##🧭 Navigering
+~~~
 
+##🧭 Navigering
+---
 Navigering hanteras via WordPress inbyggda menysystem och wp_nav_menu().
 Administratörer kan skapa och redigera menyer via Utseende → Menyer utan att ändra kod.
 
 ##🎛️ Anpassningsläge (Customizer)
-
+---
 Temat innehåller flera egna sektioner i Utseende → Anpassa, bland annat:
 - Webbplatsens identitet
 - Hero – startsida
